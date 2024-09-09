@@ -1,0 +1,46 @@
+{% extends 'userProfile/home.html' %}
+
+{% block content %}
+
+    <form method="post" action="{% url 'profile' %}">
+      {% csrf_token %}
+
+{#      <table>#}
+{#        <div class="form-group mb-3">#}
+        {# Используя "as_table" выводятся ровные поля формы для ввода ввиде Таблицы !#}
+          {{ form.as_p }}
+{#        {{ form }}#}
+{#        </div>#}
+{#      </table>#}
+
+      <button type="submit" class="btn btn-primary">Отправить</button>
+    </form>
+
+
+{% endblock %}
+
+{#Справочно: #}
+
+{#https://metanit.com/python/django/4.3.php#}
+{#С помощью специальных методов можно настроить общее отображение формы:#}
+
+{#as_table(): отображение в виде таблицы#}
+
+{#as_ul(): отображение в виде списка#}
+
+{#as_p(): каждое поле формы отобажается в отдельном параграфе#}
+
+{#as_div(): каждое поле формы отобажается в отдельном блоке div#}
+
+
+
+{#{% block content %}#}
+{##}
+{#  <title>ПРОФАЙЛ</title>#}
+{#  <form method="post" action="{% url 'profile' %}">#}
+{#    {% csrf_token %}#}
+{#    <p><label class="form-label" for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>{{ form.first_name }}</p>#}
+{#    <p><button type="submit" class="btn btn-primary">Отправить</button></p>#}
+{#  </form>#}
+{##}
+{#{% endblock %}#}
