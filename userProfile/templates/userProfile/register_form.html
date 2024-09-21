@@ -1,0 +1,20 @@
+{% extends 'userProfile/home.html' %}
+
+{% block content %}
+
+    <form method="post" action="{% url 'register_form' %}">
+      {% csrf_token %}
+
+      <table>
+{#        <div class="form-group mb-3">#}
+        {# Используя "as_table" выводятся ровные поля формы для ввода ввиде Таблицы !#}
+          {{ form.as_table }}
+{#        {{ form.as_p }}#}
+{#        {{ form }}#}
+{#        </div>#}
+      </table>
+
+      <button type="submit" class="btn btn-primary">Отправить</button>
+    </form>
+
+{% endblock %}

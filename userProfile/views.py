@@ -1,3 +1,6 @@
+import profile
+
+from django.contrib import messages
 from django.shortcuts import render
 
 from django.contrib.auth.models import User, Group
@@ -5,6 +8,7 @@ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 
 from .forms import ProfileForm
+from .forms import RegistrationForm
 from .models import Profile
 
 from django.contrib.auth import authenticate, login, logout
@@ -12,6 +16,34 @@ from django.contrib.auth import authenticate, login, logout
 
 def home(request):
     return render(request, 'userProfile/home.html')
+
+
+# <!-- 1 Вариант через class RegistrationForm(forms.Form): -->
+def registration_form(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+
+        if form.is_valid():
+            # Обработка данных формы
+            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+
+            # Сохранение данных в базу
+            user = User.objects.create_user(username, email, password)
+            user.save()
+
+            messages.success(request, 'Вы успешно зарегистрированы!')
+
+            return HttpResponseRedirect(reverse('home'))
+
+        else:
+            # return HttpResponseRedirect(reverse('home'))
+            form.add_error(None, 'Не удалось создать пользователя')
+    else:
+        form = RegistrationForm()
+
+    return render(request, 'userProfile/register_form.html', {'form': form})
 
 
 # <!-- 1 Вариант через MODAL window for REGISTRATION -->
@@ -216,3 +248,10 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect(reverse('home'))
+
+
+def profile_users_list(request):
+    users = User.objects.all()
+    profiles = Profile.objects.filter(user=request.user)
+
+    return render(request, 'userProfile/profile_list.html', {'users': users, 'profiles': profiles})

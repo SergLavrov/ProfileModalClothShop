@@ -1,6 +1,45 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, MaxLengthValidator
+from django.utils.deconstruct import deconstructible
 
+
+# Вариант "РЕГИСТРАЦИИ" через forms.py (В models.py Класс для регистрации НЕ создается):
+class RegistrationForm(forms.Form):
+    username = forms.CharField(validators=[
+                                   MinLengthValidator(3, message='Минимум 3 символа'),
+                                   MaxLengthValidator(10, message='Максимум 10 символов'),
+                               ])
+    email = forms.EmailField()
+    password = forms.CharField(widget=forms.PasswordInput)
+    confirm_password = forms.CharField(widget=forms.PasswordInput)
+
+    # Валидация НА УРОВНЕ ФОРМЫ:
+    # Помимо валидации отдельных полей, вы можете выполнять валидацию на уровне всей формы.
+    # Это полезно, когда вам нужно проверить зависимость между несколькими полями или выполнить комплексные проверки.
+    def clean_confirm_password(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get('password')
+        confirm_password = cleaned_data.get('confirm_password')
+
+        if password != confirm_password:
+            raise forms.ValidationError("Пароли не совпадают!")
+
+    # ПОЛЬЗОВАТЕЛЬСКАЯ валидация:
+    # Вы можете добавить собственные правила валидации, переопределив метод
+    # clean в классе формы или создав методы clean_ < fieldname > для отдельных полей.
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        # if len(username) < 5:
+        if ' ' in username:
+            raise forms.ValidationError("Логин не должен содержать пробелов!")
+        return username
+
+    # def clean_username(self):
+    #     username = self.cleaned_data['username']
+    #     if len(username) < 3:
+    #         raise forms.ValidationError("Логин слишком короткий!")
+    #     return username
 
 # ВСЕ поля-классы можно посмотреть в документации на django.forms - FORM fields
 
@@ -36,10 +75,40 @@ from django.core.validators import MinLengthValidator, MaxLengthValidator
 
 # error_messages={'min_length': 'Слишком короткое имя'} - мы можем создавать свои сообщения об ошибках!
 
+
+
+# СОЗДАНИЕ СОБСТВЕННЫХ ВАЛИДАТОРОВ (через декоратор @deconstructible):
+#
+# Например, создадим ВАЛИДАТОР для поля "first_name", который будет проверять - чтобы "ИМЯ" содержало
+# только РУССКИЕ БУКВЫ !!!
+
+# Справочно - чтобы импортировать декоратор - "@deconstructible" наводим на него курсор и ДЕРЖИМ !!!
+#             ПОЯВИТЬСЯ import deconstructible
+
+@deconstructible
+class RussianLettersValidator:
+    ALLOWED_CHARS = 'АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюя'
+    code = 'russian'
+
+    def __init__(self, message=None):
+        self.message = message if message else 'Допускаются только русские буквы.'
+
+    # Справочно - чтобы импортировать ValidationError наводим на него курсор и ДЕРЖИМ !!!
+    # #             ПОЯВИТЬСЯ import this name - django.core.exceptions.ValidationError
+
+    def __call__(self, value):
+        for char in value:
+            if char not in self.ALLOWED_CHARS:
+                raise ValidationError(self.message, code=self.code)
+
+
 class ProfileForm(forms.Form):
-    first_name = forms.CharField(label='Имя', min_length=2, max_length=100,
+    first_name = forms.CharField(label='Имя', min_length=2, max_length=100,           # ПО умолчанию = True (обязательное)
                                   error_messages={'min_length': 'Слишком короткое имя',
-                                                  'required': 'Обязательное поле'}) # ПО умолчанию = True (обязательное)
+                                                  'required': 'Обязательное поле'},
+                                  validators=[
+                                      RussianLettersValidator(),
+                                  ])
     last_name = forms.CharField(label='Фамилия', min_length=2, max_length=100)
     age = forms.IntegerField(label='Возраст', min_value=18, max_value=100)
     phone = forms.CharField(label='Телефон', max_length=20,
