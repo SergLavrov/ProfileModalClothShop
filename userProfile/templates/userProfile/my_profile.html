@@ -1,0 +1,44 @@
+{% extends 'userProfile/home.html' %}
+
+{% block content %}
+
+    <h4 class="text-center" style="padding-top: 20px; font-family: cursive; font-size: 22px">Мой профиль</h4>
+    {#    <a class="btn btn-outline-secondary" href="{% url 'profile-list' %}">Войти в профиль</a>#}
+
+      <table class="table table-hover table-striped-columns table-bordered border-black overflow-x-visible">
+
+      <thead>
+      <tr style="text-align: center">
+{#                    <th>Логин</th>#}
+        <th>E-mail</th>
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Возраст</th>
+        <th>Телефон</th>
+        <th>Индекс</th>
+        <th>О себе</th>
+        <th>Удалить</th>
+      </tr>
+      </thead>
+
+      <tbody>
+{#              {% for profile in profiles %}#}
+      <tr style="text-align: center; height: 20px">
+{#                    <td>{{ user.username }}</td>#}
+        <td>{{ user.email }}</td>
+        <td>{{ profile.first_name }}</td>
+        <td>{{ profile.last_name }}</td>
+        <td>{{ profile.age }}</td>
+        <td>{{ profile.phone }}</td>
+        <td>{{ profile.postcode }}</td>
+        <td>{{ profile.about }}</td>
+        <td>
+{#          <a href="{% url 'ticket-detail' ticket.id %}" class="btn btn-outline-secondary">Details</a>#}
+          <a href="{% url 'delete-profile' %}" class="btn btn-outline-secondary">ДА</a>
+        </td>
+      </tr>
+{#      {% endfor %}#}
+      </tbody>
+    </table>
+
+{% endblock %}

@@ -9,8 +9,10 @@
   <title>Title</title>
 </head>
 
+
 <body>
-      <p class="align-center" style="text-align: center; font-size: 25px"> Главная страница !</p>
+      <a style="text-align: center; font-size: 25px" href="{% url 'home' %}">Главная страница!</a>
+{#      <p class="align-center" style="text-align: center; font-size: 25px">Главная страница!</p>#}
 
       <hr>
 
@@ -60,7 +62,9 @@
 {#              <button type="button" class="btn btn-primary nav-link active col" data-toggle="modal" data-target="#profileModal">#}
 {#                Профиль#}
 {#              </button>#}
-              <a class="nav-link active col" aria-current="page" href="{% url 'profile' %}">Профиль</a>
+              <a class="nav-link active col" aria-current="page" href="{% url 'add-profile' %}">Добавить профиль</a>
+
+              <a class="nav-link active col" aria-current="page" href="{% url 'profile-user' %}">Войти в профиль</a>
             {% endif %}
 
             {% if user.is_authenticated %}
@@ -190,7 +194,7 @@
 {#              <button class="btn-close" data-dismiss="modal" aria-label="X"></button>#}
 {#            </div>#}
 {##}
-{#            <form method="post" action="{% url 'profile' %}">#}
+{#            <form method="post" action="{% url 'add-profile' %}">#}
 {#              {% csrf_token %}#}
 {##}
 {#              <div class="modal-body">#}

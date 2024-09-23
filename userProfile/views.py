@@ -195,7 +195,7 @@ def add_profile_user(request):
         'form': form
     }
 
-    return render(request, 'userProfile/profile_user.html', data)
+    return render(request, 'userProfile/add_profile_user.html', data)
 
 
 # 2.  Вариант - ПРОФИЛЬ ПОЛЬЗОВАТЕЛЯ через МОДАЛЬНОЕ ОКНО data-target="#profileModal"
@@ -250,8 +250,46 @@ def logout_user(request):
     return HttpResponseRedirect(reverse('home'))
 
 
-def profile_users_list(request):
-    users = User.objects.all()
-    profiles = Profile.objects.filter(user=request.user)
+# Если хотим вывести список ВСЕХ профилей, без привязки к конкретному user !
+# def profile_users_list(request):
+#     profiles = Profile.objects.all()
+#     data = {
+#         'profiles': profiles
+#     }
+#     return render(request, 'userProfile/profile_list.html', data)
 
-    return render(request, 'userProfile/profile_list.html', {'users': users, 'profiles': profiles})
+
+def profile_user(request):
+    if request.user.is_authenticated:
+        prof = Profile.objects.get(user=request.user)
+
+        return render(request, 'userProfile/my_profile.html', {'profile': prof})
+    else:
+        return HttpResponseRedirect(reverse('home'))
+
+
+def delete_profile_user(request):
+    if request.user.is_authenticated:
+        prof = Profile.objects.get(user=request.user)
+        prof.delete()
+        return HttpResponseRedirect(reverse('home'))
+    else:
+        return HttpResponseRedirect(reverse('home'))
+
+
+# def delete_ticket(request, ticket_id: int):
+#     ticket = Ticket.objects.get(id=ticket_id)
+#     ticket.delete()
+#     return redirect('ticket-list')
+
+
+
+# Просто пример!
+# def get_products_list(request: HttpRequest) -> HttpResponse:
+#     if request.user.is_authenticated:
+#         user = request.user
+#         products = Product.objects.filter(company__name_company=user)
+#
+#         return render(request, 'products/products_list.html', {'products': products})
+#     else:
+#         return render(request, 'userAdmin/login.html')
