@@ -285,6 +285,7 @@ def delete_profile_user(request):
 
 
 # Просто пример!
+
 # def get_products_list(request: HttpRequest) -> HttpResponse:
 #     if request.user.is_authenticated:
 #         user = request.user
