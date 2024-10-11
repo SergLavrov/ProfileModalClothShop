@@ -11,8 +11,10 @@ class Profile(models.Model):
     postcode = models.CharField(max_length=6)
     about = models.TextField(blank=True)
     time_created = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField('/my_avatar/')
 
-
+    class Meta:
+        ordering = ['id']
 
 # null=True - допустимое значение NULL в базе данных для поля !
 # blank=True - поле может быть пустым !

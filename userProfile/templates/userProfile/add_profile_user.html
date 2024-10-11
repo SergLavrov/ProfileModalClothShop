@@ -2,7 +2,8 @@
 
 {% block content %}
 
-    <form method="post" action="{% url 'add-profile' %}">
+    <form method="post" enctype="multipart/form-data" action="{% url 'add-profile' %}">
+
       {% csrf_token %}
 
 {#      <table>#}
@@ -31,16 +32,3 @@
 {#as_p(): каждое поле формы отобажается в отдельном параграфе#}
 
 {#as_div(): каждое поле формы отобажается в отдельном блоке div#}
-
-
-
-{#{% block content %}#}
-{##}
-{#  <title>ПРОФАЙЛ</title>#}
-{#  <form method="post" action="{% url 'profile' %}">#}
-{#    {% csrf_token %}#}
-{#    <p><label class="form-label" for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>{{ form.first_name }}</p>#}
-{#    <p><button type="submit" class="btn btn-primary">Отправить</button></p>#}
-{#  </form>#}
-{##}
-{#{% endblock %}#}

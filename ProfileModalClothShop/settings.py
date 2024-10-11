@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -116,6 +117,13 @@ USE_I18N = True
 
 USE_TZ = True
 
+# Для хранения всех загруженных файлов определяется отдельная папка.
+# Эта папка указывается в переменной MEDIA_ROOT, в файле 'settings.py'.
+# Есть еще переменная MEDIA_URL, которая используется в шаблонах и адресах
+# для обращения к файлам в  MEDIA_ROOT.
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/

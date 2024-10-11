@@ -126,6 +126,8 @@ class ProfileForm(forms.Form):
                                ])
     about = forms.CharField(label='Комментарий', help_text='Напишите немного о себе',
                             widget=forms.Textarea(attrs={'rows': 5, 'cols': 30}), required=False)
+    image = forms.ImageField(label='Изображение', required=False)
+    # image = forms.ImageField(label='Изображение', required=False)
 
 # 3 Вариант - ПОЛЬЗОВАТЕЛЬСКАЯ ВАЛИДАЦИЯ мы можем добавить собственные правила валидации, переопределив метод "clean"
 # в классе формы или создав методы clean_ < fieldname > для отдельных полей:
