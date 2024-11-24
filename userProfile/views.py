@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from django.contrib.auth.models import User, Group
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
@@ -286,13 +286,19 @@ def logout_user(request):
     return HttpResponseRedirect(reverse('home'))
 
 
-# Если хотим вывести список ВСЕХ профилей, без привязки к конкретному user !
-# def profile_users_list(request):
-#     profiles = Profile.objects.all()
-#     data = {
-#         'profiles': profiles
-#     }
-#     return render(request, 'userProfile/profile_list.html', data)
+# Если хотим вывести список ВСЕХ профилей !
+def profile_users_list(request):
+    if request.user.is_staff:
+        profiles = Profile.objects.all()
+
+        data = {
+            'profiles': profiles
+        }
+        return render(request, 'userProfile/profile_list.html', data)
+
+    else:
+        messages.error(request, 'У Вас нет прав администратора!')
+        return redirect(reverse('home'))
 
 
 def profile_user(request):
