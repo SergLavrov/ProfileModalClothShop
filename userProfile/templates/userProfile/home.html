@@ -32,7 +32,24 @@
 
 {#      <p class="align-center" style="text-align: center; font-size: 25px">Главная страница!</p>#}
 
-      <img src="/media/18.jpg" alt="homeimage" style="width:100%;height:250px;">
+{#        ПРОСТО ОДНО ФОТО БЕЗ КАРУСЕЛИ !!!#}
+{#      <img src="/media/18.jpg" alt="homeimage" style="width:100%;height:250px;">#}
+
+{#      КАРУСЕЛЬ - слайд-шоу - Автозапуск каруселей без управления - слайды меняются автоматически!!!#}
+{#                 смотри BOOTSTRAP - https://getbootstrap.com/docs/5.3/components/carousel/#how-it-works#}
+      <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner" style="width:100%;height:250px;">
+          <div class="carousel-item active">
+            <img src="/media/ProductFoto/19.jpg" class="d-block w-100" alt="homeimage1">
+          </div>
+          <div class="carousel-item">
+            <img src="/media/ProductFoto/25.jpg" class="d-block w-100" alt="homeimage2">
+          </div>
+          <div class="carousel-item">
+            <img src="/media/ProductFoto/9-1.jpg" class="d-block w-100" alt="homeimage3">
+          </div>
+        </div>
+      </div>
 
       <hr>
 
