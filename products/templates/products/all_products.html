@@ -1,0 +1,317 @@
+{% extends 'userProfile/home.html' %}
+
+{% block content %}
+
+  <style>
+      .card {
+          box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
+          transition: all .3s;
+      }
+      .card:hover {
+          box-shadow: 0 14px 30px -15px rgba(0, 0, 0, 1.5);
+      }
+  </style>
+
+{#  <h4 class="text-center" style="padding-top: 20px; font-family: cursive; font-size: 22px">Список товаров</h4>#}
+
+  <div class="container" style="padding-left: 10px; padding-right: 10px">
+
+    <div class="row content">
+
+      <div class="col-sm-2 pl-4 pr-4" style="background-color: lightgrey; height: 800px; position: sticky; top: 30px;">
+
+          <hr/>
+
+        {#  СОРТИРОВКА ТОВАРОВ !!!#}
+{#          <h4 class="text-center">Сортировка</h4>#}
+          <form method="POST" class="row" action="{% url 'get-sorted' %}">
+            {% csrf_token %}
+
+{#            Чтобы НЕ нажимать КНОПКУ (type="submit") (см. ниже) для подтверждения отправки, мы можем прописать#}
+{#            в <select onchange="form.submit()"> - тогда при выборе нужного значения - #}
+{#            сортировка происходит автоматически  !!!#}
+
+            <select name="select_value" class="form-select" onchange="form.submit()">
+              <option selected disabled>Сортировка:</option>
+
+              <optgroup label="По цене:">
+                  <option value="value1">по возрастанию</option>
+                  <option value="value2">по убыванию</option>
+              </optgroup>
+
+              <optgroup label="По имени:">
+                  <option value="value3">от А до Я</option>
+                  <option value="value4">от Я до А</option>
+              </optgroup>
+            </select>
+
+                {#Тег <option> определяет опцию - "Выберите из ВЫПАДАЮЩЕГО списка". <option> помещаются внутрь <select> #}
+                {#Тег можно использовать без каких-либо атрибутов, но Обычно требуется атрибут value, который указывает, #}
+                {#что отправляется на сервер при отправке формы.#}
+
+{#            <div style="padding-top: 10px">#}
+{#                <input type="submit" value="Найти">#}
+{#                <button type="submit" value="Найти" class="btn btn-outline-secondary">Найти</button>#}
+{#            </div>#}
+          </form>
+
+          <hr/>
+
+          <h4 class="text-center">Фильтры:</h4>
+          <hr/>
+
+{#          <div>#}
+{#            """ Фильтрация по "категории" товара ЧЕРЕЗ ССЫЛКУ """#}
+{#            <ul class="list-group" style="padding-bottom: 25px; font-family: inherit">#}
+
+{#              {% for cat in categories %}#}
+{#                  <li {% if category.id == cat.id %} class="selected"#}
+{#                      {% endif %}>#}
+{#                      <a href="{% url 'products-by-category' cat.id %}">#}
+{#                         {{ cat.name_category }}#}
+{#                      </a>#}
+{#                      <a href="{{ cat.get_absolute_url }}">{{ cat.name_category }}</a>#}
+{#                      """ Смотри models.py - class Category(models.Model) """ #}
+{#                  </li>#}
+{#              {% endfor %}#}
+{#            </ul>#}
+{#          </div>#}
+
+{#          <div>#}
+{#            """ Фильтрация по "сезону" товара ЧЕРЕЗ ССЫЛКУ """#}
+{#            <ul class="list-group" style="padding-bottom: 25px; font-family: inherit">#}
+{##}
+{#              {% for s in seasons %}#}
+{#                  <li {% if season.id == s.id %} class="selected"#}
+{#                      {% endif %}>#}
+{#                      <a href="{% url 'products-by-category' s.id %}">#}
+{#                         {{ s.name_season }}#}
+{#                      </a>#}
+{#                  </li>#}
+{#              {% endfor %}#}
+{##}
+{#            </ul>#}
+{#          </div>#}
+
+          <form method="post" action="{% url 'checkbox-products' %}">
+            {% csrf_token %}
+
+            <div class="form-check">
+              <label style="padding-left: 20px; font-family: inherit; font-size: 18px"><b>Категория</b></label>
+              <br/>
+{#                Можно так - НЕ через цикл for !!!#}
+{#              <input type="checkbox" class="form-check-input" name="seasons" value="Лето" id="season1">#}
+{#              <label for="season1" class="form-check-label">Лето</label>#}
+{#              <br/>#}
+{#              <input type="checkbox" class="form-check-input" name="seasons" value="Осень" id="season2">#}
+{#              <label for="season2" class="form-check-label">Осень</label>#}
+{#              <br/>#}
+{#              <input type="checkbox" class="form-check-input" name="seasons" value="Зима" id="season3">#}
+{#              <label for="season3" class="form-check-label">Зима</label>#}
+{#              <br/>#}
+{#              <input type="checkbox" class="form-check-input" name="seasons" value="Весна" id="season4">#}
+{#              <label for="season4" class="form-check-label">Весна</label>#}
+{#              <br/>#}
+
+                {% for cat in categories %}     {# categories берем из data из views #}
+                  <label>
+{#                    <input type="checkbox" class="form-check-input" name="categories" value="{{ cat.name_category }}">#}
+                    <input type="checkbox" class="form-check-input" name="categories" value="{{ cat.id }}">
+                    <span>{{ cat.name_category }}</span>
+                  </label>
+                  <br/>
+                {% endfor %}
+
+              <hr/>
+
+{#    1 Вариант через "name_seasons_list"#}
+{#              <label style="padding-left: 20px; font-family: inherit; font-size: 18px"><b>Сезон</b></label>#}
+{#              <br/>#}
+{#                {% for s in seasons %} {# seasons берем из data из views #}
+{#                  <label>#}
+{#                    <input type="checkbox" class="form-check-input" name="seasons" value="{{ s.name_season }}">#}
+{#                    <span>{{ s.name_season }}</span>#}
+{#                  </label>#}
+{#                   <br/>#}
+{#                {% endfor %}#}
+
+{#    2 Вариант через "id_seasons_list"#}
+              <label style="padding-left: 20px; font-family: inherit; font-size: 18px"><b>Сезон</b></label>
+              <br/>
+              {% for s in seasons %} {# seasons берем из data из views #}
+                <label>
+                  <input type="checkbox" class="form-check-input" name="seasons" value="{{ s.id }}">
+                  <span>{{ s.name_season }}</span>
+                </label>
+                <br/>
+              {% endfor %}
+
+              <hr/>
+
+{#              1 Вариант#}
+              <label style="padding-left: 20px; font-family: inherit; font-size: 18px"><b>Перечень</b></label>
+              <br/>
+              <input type="checkbox" class="form-check-input" name="prod_names" value="Джемпер" id="pr1">
+              <label for="pr1" class="form-check-label">Джемпер</label>
+              <br/>
+              <input type="checkbox" class="form-check-input" name="prod_names" value="Ботинки" id="pr2">
+              <label for="pr2" class="form-check-label">Ботинки</label>
+              <br/>
+              <input type="checkbox" class="form-check-input" name="prod_names" value="Туфли" id="pr3">
+              <label for="pr3" class="form-check-label">Туфли</label>
+              <br/>
+              <input type="checkbox" class="form-check-input" name="prod_names" value="Галстук" id="pr4">
+              <label for="pr4" class="form-check-label">Галстук</label>
+              <br/>
+              <input type="checkbox" class="form-check-input" name="prod_names" value="Ремень" id="pr5">
+              <label for="pr5" class="form-check-label">Ремень</label>
+              <br/>
+              <input type="checkbox" class="form-check-input" name="prod_names" value="Брюки" id="pr6">
+              <label for="pr6" class="form-check-label">Брюки</label>
+              <br/>
+              <input type="checkbox" class="form-check-input" name="prod_names" value="Пальто" id="pr7">
+              <label for="pr7" class="form-check-label">Пальто</label>
+              <br/>
+              <input type="checkbox" class="form-check-input" name="prod_names" value="Кроссовки" id="pr8">
+              <label for="pr8" class="form-check-label">Кроссовки</label>
+              <br/>
+              <input type="checkbox" class="form-check-input" name="prod_names" value="Джинсы" id="pr9">
+              <label for="pr9" class="form-check-label">Джинсы</label>
+              <br/>
+
+{#               2 Вариант - через цикл - НО тогда выводит ВСЕ товары подряд - НО названия товаров могут повторяться- #}
+{#                  тогда через цикл выводятся чекбоксы с одинаковыми названиями !!!#}
+{#              <label style="padding-left: 20px; font-family: inherit; font-size: 18px"><b>Перечень</b></label>#}
+{#              <br/>#}
+{#                {% for prod in products %}#}
+{#                  <label>#}
+{#                    <input type="checkbox" class="form-check-input" name="prod_names" value="{{ prod.name_product }}">#}
+{#                    <span>{{ prod.name_product }}</span>#}
+{#                  </label>#}
+{#                   <br/>#}
+{#                {% endfor %}#}
+
+              <hr/>
+            </div>
+{#            <br/>#}
+
+{#            <div class="form-check">#}
+{#              <label style="padding-left: 20px; font-family: inherit; font-size: 18px"><b>Категория</b></label>#}
+{#              <br/>#}
+{##}
+{#                {% for cat in categories %}#}
+{#                  <label>#}
+{#                    <input type="checkbox" class="form-check-input" name="categories" value="{{ cat.name_category }}">#}
+{#                    <span>{{ cat.name_category }}</span>#}
+{#                  </label>#}
+{#                  <br/>#}
+{#                {% endfor %}#}
+{#            </div>#}
+{#            <br/>#}
+            <div>
+{#                <input type="submit" value="Найти">#}
+                <a href="{% url 'get-products' %}" class="btn btn-outline-secondary">К списку</a>
+                <button type="submit" value="Найти" class="btn btn-outline-secondary">Найти</button>
+            </div>
+          </form>
+      </div>
+
+
+{#        <div class="form-check">#}
+{#              <h5>Сезон</h5>#}
+{##}
+{#                {% for s in seasons %}#}
+{#                  <div>#}
+{#                    <input class="form-check-input" type="checkbox" id="checkseason">#}
+{#                    <label for="checkseason" class="form-check-label">{{ s.name_season }}</label>#}
+{#                  </div>#}
+{#                {% endfor %}#}
+{##}
+{#            </div>#}
+
+{#    Справочно !!!#}
+{#    Для создания связи <label> с <input> существует два способа:#}
+{##}
+{#    1. Связь по id. Для этого необходимо задать уникальный id для <input> и связать <label> с чекбоксом с помощью атрибута for#}
+{#   <form>#}
+{#     <input id="html" type="checkbox">#}
+{#     <label for="html">Хочу изучать HTML</label>#}
+{#   </form>#}
+{#      #}
+{#2. Вложить <input> внутрь тега <label>. При этом указание уникального id не требуется!#}
+{#    <form>#}
+{#      <label>#}
+{#        <input type="checkbox">#}
+{#        Хочу изучать HTML#}
+{#      </label>#}
+{#    </form>#}
+
+{#      Справочно !!!#}
+{#      a) Для того, чтобы после отправки формы на сервер возможно было узнать, какие именно пункты были выбраны,#}
+{#      используется атрибут "value", внутри которого находится значение, позволяющее определить чекбокс.#}
+{##}
+{#      б) Так как чекбоксов на странице может быть много, и они могут относиться к разным формам, #}
+{#      для определения конкретной группы чекбоксов используется атрибут "name". #}
+{#      Для каждой группы чекбоксов указывается своё имя, по которому, в дальнейшем, #}
+{#      возможно отделить группы чекбоксов при обработке на сервере.#}
+{#        Атрибут "name" указываем во views.py name_categories_list = request.POST.getlist('categories')#}
+{#        В данном примере атрибут "name" = ('categories')#}
+
+    {#            Справочно !!! - так можно делать при ВХОДЕ на сайт ! Надо разбираться как это работает !?#}
+                {#            <div class="form-check mb-2">#}
+                {#              <input type="checkbox" class="form-check-input" id="RememberMe">#}
+                {#              <label for="RememberMe" class="form-check-label" >Запомнить меня</label>#}
+                {#            </div>#}
+                {#            Для стилизации нетекстовых полей используйте соответствующие классы, например, #}
+                {#            для чекбокса класс - form-check-input, его метке label — класс form-check-label, #}
+                {#            а группирующему их тегу div — класс form-check.#}
+
+{#      Справочно !!! #}
+{#      <div class="form-check">#}
+{#        <input class="form-check-input" type="checkbox" id="demoCheckbox">#}
+{#        <label class="form-check-label" for="demoCheckbox">#}
+{#          Без флажка по умолчанию#}
+{#        </label>#}
+{#      </div>#}
+{#      <div class="form-check">#}
+{#        <input class="form-check-input" type="checkbox" id="demoCheckboxChecked" checked>#}
+{#        <label class="form-check-label" for="demoCheckboxChecked">#}
+{#          С флажком по умолчанию (ПРОСТО в <input ставим в конце ... checked> !!!#}
+{#        </label>#}
+{#      </div>#}
+
+      <div class="col-sm-10">
+
+          <div class="d-flex flex-row flex-wrap justify-content-flex-start row-gap-3 column-gap-3 px-4">
+            {% for product in products %}
+              <div class="card" style="width: 14rem; border-image: 10 fill">
+                <img src="{{ product.image.url }}" class="card-img" alt="image">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between">
+                    <h6 class="card-title">{{ product.name_product }} - {{ product.price }} BYN</h6>
+    {#                    <h6 class="text-black-50">{{ product.price }} BYN</h6>#}
+                  </div>
+    {#                  <p class="card-text">{{ product.description }}</p>#}
+                      <div class="d-flex justify-content-between">
+                        <a href="{% url 'product-details' product.id %}" class="btn btn-outline-secondary">Подробно</a>
+{#                        <a href="{% url 'add-to-basket' product.id %}" class="btn btn-outline-secondary">Add to basket</a>#}
+{#                        {% if user.is_authenticated %}#}
+{#                        <a href="{% url 'add-to-basket' product.id %}"><i class="fa fa-shopping-cart"></i></a>#}
+{#                                            {% endif %}#}
+                      </div>
+                </div>
+              </div>
+    {#              <div>#}
+    {#                <a href="{% url 'product-details' product.id %}">{{ product.name }}</a>#}
+    {#              </div>#}
+            {% endfor %}
+          </div>
+      </div>
+
+    </div>
+  </div>
+
+  <br>
+  <hr>
+
+{% endblock %}
