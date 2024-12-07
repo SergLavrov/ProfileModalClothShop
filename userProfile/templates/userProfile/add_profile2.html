@@ -1,0 +1,55 @@
+{% extends 'userProfile/home.html' %}
+
+{% block content %}
+
+  <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4 bg-white p-2" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.2)">
+            <h2 class="text-center">Добавление профиля</h2>
+{#            {% if error_message %}#}
+{#                <div class="alert alert-danger" role="alert">#}
+{#                    {{ error_message }}#}
+{#                </div>#}
+{#            {% endif %}#}
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="first_name">Имя</label>
+                    <input type="text" class="form-control" id="first_name" name="first_name">
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Фамилия</label>
+                    <input type="text" class="form-control" id="last_name" name="last_name">
+                </div>
+                <div class="form-group">
+                    <label for="age">Возраст</label>
+                    <input type="number" class="form-control" id="age" name="age">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Телефон</label>
+                    <input type="text" class="form-control" id="phone" name="phone">
+                </div>
+                <div class="form-group">
+                    <label for="postcode">Индекс</label>
+                    <input type="number" class="form-control" id="postcode" name="postcode">
+                </div>
+                <div class="form-group">
+                    <label for="about">О себе</label>
+                    <textarea class="form-control" id="about" name="about"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="image">Аватар</label>
+                    <input type="file" class="form-control-file" id="image" name="image">
+                </div>
+                <button type="submit" class="btn btn-primary">Добавить</button>
+                <a href="{% url 'home' %}" class="btn btn-secondary">Назад</a>
+            </form>
+        </div>
+
+        <div class="col-4"></div>
+    </div>
+
+
+{% endblock %}

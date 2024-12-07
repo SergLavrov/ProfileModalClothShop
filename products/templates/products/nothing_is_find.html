@@ -1,0 +1,13 @@
+{% extends 'userProfile/home.html' %}
+
+{% block content %}
+
+<p class="text-center" style="font-size: 18px; color: darkslateblue; padding-bottom: 40px; padding-top: 60px">
+  <b>По Вашему запросу ничего не найдено. Чтобы продолжить поиск, вернитесь к списку товаров!</b>
+  </p>
+
+  <a href="{% url 'get-products' %}" class="btn btn-secondary" style="margin-bottom: 25px;
+    position: relative; left: 45%">К списку</a>
+
+
+{% endblock %}

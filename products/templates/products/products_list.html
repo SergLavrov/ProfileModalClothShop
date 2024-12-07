@@ -1,0 +1,49 @@
+{% extends 'userProfile/home.html' %}
+
+{% block content %}
+
+  <h4 class="text-center" style="padding-top: 20px; font-family: cursive; font-size: 22px">Список товаров</h4>
+
+{#    В виде ТАБЛИЦЫ:#}
+    <table class="table table-hover table-striped-columns table-bordered border-black overflow-x-visible">
+
+      <thead>
+      <tr style="text-align: center">
+        <th>Фото</th>
+        <th>Название</th>
+        <th>Цвет</th>
+        <th>Категория</th>
+        <th>Сезон</th>
+        <th>Активность</th>
+        <th></th>
+      </tr>
+      </thead>
+
+      <tbody>
+      {% for product in products %}
+        <tr style="text-align: center; height: 20px">
+          <td>
+            <img src="{{ product.image.url }}" alt="Фото товара" height="60" width="60">
+          </td>
+          <td>{{ product.name_product }}</td>
+          <td>{{ product.color }}</td>
+          <td>{{ product.category.name_category }}</td>
+          <td>{{ product.season.name_season }}</td>
+          <td class="d-none d-md-table-cell">
+            {% if product.is_deleted %}
+              <b>Удален</b>
+            {% else %}
+              активен
+            {% endif %}
+          </td>
+          <td>
+{#            <a href="{% url 'ticket-detail' ticket.id %}" class="btn btn-outline-secondary">Details</a>#}
+            <a href="{% url 'delete-product' product.id %}" class="btn btn-outline-secondary">Удалить</a>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+
+    </table>
+
+{% endblock %}

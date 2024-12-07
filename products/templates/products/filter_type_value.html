@@ -1,0 +1,24 @@
+{% extends 'userProfile/home.html' %}
+
+{% block content %}
+
+{#  <h4 class="text-center" style="padding-top: 20px; font-family: cursive; font-size: 22px">Список товаров</h4>#}
+
+  <div class="col-sm-12">
+      <div class="d-flex flex-row flex-wrap justify-content-flex-start row-gap-3 column-gap-3 px-4">
+        {% for product in products %}
+          <div class="card" style="width: 14rem; border-image: 10 fill">
+            <img src="{{ product.image.url }}" class="card-img" alt="image">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <h6 class="card-title">{{ product.name_product }}   Цвет-{{ product.color }}</h6>
+              </div>
+            </div>
+        {% endfor %}
+      </div>
+  </div>
+
+  <br>
+  <hr>
+
+{% endblock %}

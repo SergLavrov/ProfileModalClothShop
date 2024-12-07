@@ -1,0 +1,143 @@
+{% extends 'userProfile/home.html' %}
+
+{% block content %}
+
+  <div class="row col-12 offset-lg-2 col-lg-8">
+
+    <h4 class="pt-5" style="text-align: center; padding-bottom: 10px">Add product:</h4>
+
+{#    {% if error %}#}
+{#      <div class="alert alert-danger" role="alert">#}
+{#        {{ error }}#}
+{#      </div>#}
+{#    {% endif %}#}
+
+    <form method="POST" class="row" enctype="multipart/form-data" action="{% url 'add-product' %}">
+
+      {% csrf_token %}
+
+      <div class="col-12 col-lg-6 pb-3">
+          <label for="inputnameproduct" class="form-label fw-medium">Наименование товара</label>
+          <input type="text" name="name_product" class="form-control" id="inputnameproduct" placeholder="Введите название товара">
+      </div>
+
+      <div class="col-12 col-lg-6 pb-3">
+          <label for="inputcolor" class="form-label fw-medium">Цвет</label>
+          <input type="text" name="color" class="form-control" id="inputcolor" placeholder="Введите цвет изделия">
+      </div>
+
+      <div class="col-12 col-lg-6 pb-3">
+        <label for="inputproductcategory" class="form-label fw-medium">Категория товара</label>
+        <select class="form-select" id="inputproductcategory" name="category_id">
+          <option selected disabled>Выберите категорию</option>
+
+          {% for category in categories %}
+
+          <option value="{{ category.id }}">{{ category.name_category }}</option>
+        {#Тег <option> определяет опцию - "Выберите из ВЫПАДАЮЩЕГО списка". <option> помещаются внутрь <select> #}
+        {#Тег можно использовать без каких-либо атрибутов, но Обычно требуется атрибут value, который указывает, #}
+        {#что отправляется на сервер при отправке формы.#}
+          {% endfor %}
+        </select>
+      </div>
+{#      P.S.: value="{{ category.id }}">{{ category.name_category }}#}
+{#            "category.name_category" --> "category" берем из class Product(models.Model):#}
+{#                                   --> имя: name_category = из class Category #}
+{#                                   name_category = models.CharField(max_length=50)#}
+
+      <div class="col-12 col-lg-6 pb-3">
+        <label for="inputseason" class="form-label fw-medium">Сезон</label>
+        <select class="form-select" id="inputseason" name="season_id">
+          <option selected disabled>Выберите сезон</option>
+
+          {% for season in seasons %}
+
+          <option value="{{ season.id }}">{{ season.name_season }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="col-12 pb-3" style="margin-bottom: 15px; padding-top: 10px">
+        <label for="image">Фото</label>
+        <input type="file" id="image" name="image" >
+      </div>
+
+      <div class="col-12 pb-3" style="margin-bottom: 15px; padding-top: 10px">
+        <label for="image">Фото</label>
+        <input type="file" id="image" name="images_for_getlist" multiple>
+        <br>
+        <br>
+        <label for="image">Фото</label>
+        <input type="file" id="image" name="images_for_getlist" multiple>
+      </div>
+
+
+{#      <div class="col-12 col-lg-6 pb-3">#}
+{#        {% for i in images_list %}#}
+{##}
+{#          <label for="inputfoto">Еще фото</label>#}
+{#          <input type="file" id="inputfoto" name="images_getlist">#}
+{##}
+{#        {% endfor %}#}
+{#      </div>#}
+
+
+
+{#      <div class="col-12 pb-3" style="margin-bottom: 15px; padding-top: 10px">#}
+{#        {% for image in images_list %}#}
+{#          <!--Carousel Wrapper-->#}
+{#        <div id="carousel-example-1z" class="carousel slide carousel-fade" data-ride="carousel">#}
+{#          <!--Indicators-->#}
+{#          <ol class="carousel-indicators">#}
+{#            {% for i in images_list %}#}
+{#              <li data-target="#carousel-example-1z" data-slide-to="{{ forloop.counter0 }}"#}
+{#                  class="{% if forloop.counter0 == 0 %} active {% endif %}"></li>#}
+{#            {% endfor %}#}
+{#          </ol>#}
+{#          <!--/.Indicators-->#}
+{#          <!--Slides-->#}
+{#          <div class="carousel-inner" role="listbox">#}
+{#            {% for i in images_list %}#}
+{#              <div class="carousel-item {% if forloop.counter0 == 0 %} active {% endif %}">#}
+{#                <img class="d-block w-100" src="{{ i.image.url }}"#}
+{#                     alt="First slide">#}
+{#              </div>#}
+{#            {% endfor %}#}
+{#            <!--/First slide-->#}
+{#            <!--/.Slides-->#}
+{#            <!--Controls-->#}
+{#            <a class="carousel-control-prev" href="#carousel-example-1z" role="button" data-slide="prev">#}
+{#              <span class="carousel-control-prev-icon" aria-hidden="true"></span>#}
+{#              <span class="sr-only">Previous</span>#}
+{#            </a>#}
+{#            <a class="carousel-control-next" href="#carousel-example-1z" role="button" data-slide="next">#}
+{#              <span class="carousel-control-next-icon" aria-hidden="true"></span>#}
+{#              <span class="sr-only">Next</span>#}
+{#            </a>#}
+{#            <!--/.Controls-->#}
+{#          </div>#}
+{#        </div>#}
+{#      </div>#}
+
+{#      <label style="padding-left: 20px; font-family: inherit; font-size: 18px"><b>Сезон</b></label>#}
+{#      <br/>#}
+{#      {% for s in seasons %} {# seasons берем из data из views #}
+{#        <label>#}
+{#          <input type="checkbox" class="form-check-input" name="seasons" value="{{ s.id }}">#}
+{#          <span>{{ s.name_season }}</span>#}
+{#        </label>#}
+{#        <br/>#}
+{#      {% endfor %}#}
+{#      #}
+
+      <div class="col-12" style="padding-bottom: 15px">
+        <button type="submit" class="btn btn-secondary">Save</button>
+{#                                      При нажатии на SUBMIT данные отправляются на СЕРВЕР командой:#}
+{#                                      см выше:<form method="POST" class="row" action="{% url 'add-product' %}">#}
+        <a href="{% url 'get-products-list' %}" class="btn btn-outline-secondary">Back</a>
+
+      </div>
+    </form>
+  </div>
+
+{% endblock %}
