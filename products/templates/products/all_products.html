@@ -18,7 +18,160 @@
 
     <div class="row content">
 
-      <div class="col-sm-2 pl-4 pr-4" style="background-color: lightgrey; height: 800px; position: sticky; top: 30px;">
+      <div class="col-sm-2 pl-4 pr-4" style="background-color: lightgrey; height: 1130px; position: sticky; top: 30px;">
+
+      {#          <div>#}
+{#            """ Фильтрация по "сезону" товара ЧЕРЕЗ ССЫЛКУ """#}
+{#            <ul class="list-group" style="padding-bottom: 25px; font-family: inherit">#}
+{##}
+{#              {% for s in seasons %}#}
+{#                  <li {% if season.id == s.id %} class="selected"#}
+{#                      {% endif %}>#}
+{#                      <a href="{% url 'products-by-category' s.id %}">#}
+{#                         {{ s.name_season }}#}
+{#                      </a>#}
+{#                  </li>#}
+{#              {% endfor %}#}
+{##}
+{#            </ul>#}
+{#          </div>#}
+
+        <ul>
+          {#      <li class="nav-item dropdown">#}
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            КАТЕГОРИИ
+          </a>
+{#         """ Выпадающий саисок через ССЫЛКУ ! (НЕ через SELECT / <option>) """#}
+          <ul class="dropdown-menu">
+
+            {% for cat in categories %}
+              <li>
+{#                1 ВАРИАНТ: через "name_category" - def get_value_dropdown_category(request, value)#}
+{#                <a class="dropdown-item" href="{% url 'get-dropdown-category' value=cat.name_category %}">#}
+
+{#                1.1 ВАРИАНТ: через 2 входных параметра - def get_typ_value_dropdown(request, typ, value):#}
+                  <a class="dropdown-item" href="{% url 'get-typ-value-dropdown' typ='category' value=cat.name_category %}">
+                    {{ cat.name_category }}</a>
+
+{#                2 ВАРИАНТ: через id категории  - def get_value_dropdown_category(request, value)#}
+{#                  <a class="dropdown-item" href="{% url 'get-dropdown-category' value=cat.id %}">#}
+{#                    {{ cat.name_category }}</a>#}
+              </li>
+            {% endfor %}
+
+          </ul>
+        </ul>
+
+        <hr/>
+
+        <ul>
+          {#      <li class="nav-item dropdown">#}
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            ОДЕЖДА
+          </a>
+{#             1 ВАРИАНТ через: def get_value_dropdown(request, value):#}
+{#          <ul class="dropdown-menu">#}
+{#            <li><a class="dropdown-item" href="{% url 'get-dropdown' value='Брюки' %}">Брюки</a></li>#}
+{#            <li><a class="dropdown-item" href="{% url 'get-dropdown' value='Джемпер' %}">Джемпер</a></li>#}
+{#            <li><a class="dropdown-item" href="{% url 'get-dropdown' value='Джинсы' %}">Джинсы</a></li>#}
+{#            <li><a class="dropdown-item" href="{% url 'get-dropdown' value='Пальто' %}">Пальто</a></li>#}
+{#          </ul>#}
+
+{#              1.1 ВАРИАНТ через: def get_typ_value_dropdown(request, typ, value):#}
+          <ul class="dropdown-menu">
+            <li>
+               <a class="dropdown-item" href="{% url 'get-typ-value-dropdown' typ='name_product' value='Брюки' %}">Брюки</a>
+            </li>
+            <li><a class="dropdown-item" href="{% url 'get-typ-value-dropdown' typ='name_product' value='Джемпер' %}">Джемпер</a></li>
+            <li><a class="dropdown-item" href="{% url 'get-typ-value-dropdown' typ='name_product' value='Джинсы' %}">Джинсы</a></li>
+            <li><a class="dropdown-item" href="{% url 'get-typ-value-dropdown' typ='name_product' value='Пальто' %}">Пальто</a></li>
+          </ul>
+          {#      </li>#}
+
+          {#      <li class="nav-item dropdown">#}
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            ОБУВЬ
+          </a>
+{#          <ul class="dropdown-menu">#}
+{#            <li><a class="dropdown-item" href="{% url 'get-dropdown' value='Ботинки' %}">Ботинки</a></li>#}
+{#            <li><a class="dropdown-item" href="{% url 'get-dropdown' value='Туфли' %}">Туфли</a></li>#}
+{#            <li><a class="dropdown-item" href="{% url 'get-dropdown' value='Кроссовки' %}">Кроссовки</a></li>#}
+{#          </ul>#}
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'get-typ-value-dropdown' typ='name_product' value='Ботинки' %}">Ботинки</a></li>
+            <li><a class="dropdown-item" href="{% url 'get-typ-value-dropdown' typ='name_product' value='Туфли' %}">Туфли</a></li>
+            <li><a class="dropdown-item" href="{% url 'get-typ-value-dropdown' typ='name_product' value='Кроссовки' %}">Кроссовки</a></li>
+          </ul>
+
+          {#      </li>#}
+{##}
+          {#      <li class="nav-item dropdown">#}
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            АКСЕССУАРЫ
+          </a>
+{#          <ul class="dropdown-menu">#}
+{#            <li><a class="dropdown-item" href="{% url 'get-dropdown' value='Галстук' %}">Галстук</a></li>#}
+{#            <li><a class="dropdown-item" href="{% url 'get-dropdown' value='Ремень' %}">Ремень</a></li>#}
+{#          </ul>#}
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'get-typ-value-dropdown' typ='name_product' value='Галстук' %}">Галстук</a></li>
+            <li><a class="dropdown-item" href="{% url 'get-typ-value-dropdown' typ='name_product' value='Ремень' %}">Ремень</a></li>
+          </ul>
+          {#      </li>#}
+        </ul>
+
+        <hr/>
+
+        <form method="POST" class="row" action="{% url 'get-config' %}">
+            {% csrf_token %}
+
+            <div style="padding-bottom: 25px">
+{#              <label for="inputcategory" class="form-label fw-medium"></label>#}
+{#              <select class="form-select" id="inputcategory" name="category_id">#}
+                <select name="category_id" class="form-select" onchange="form.submit()">
+                  <option selected disabled>Категории</option>
+
+                  {% for cat in categories %}
+
+                  <option value="{{ cat.id }}">{{ cat.name_category }}</option>
+
+                  {% endfor %}
+                </select>
+            </div>
+
+            <div style="padding-bottom: 25px">
+                <select name="name_prod" class="form-select" onchange="form.submit()">
+                  <option selected disabled>СПИСОК ТОВАРОВ</option>
+
+                  {% for p in name_list %}
+
+                  <option value="{{ p.name_product }}">{{ p.name_product }}</option>
+
+                  {% endfor %}
+                </select>
+            </div>
+
+{#            АНАЛОГИЧНО можно сделать для "ОБУВЬ" и "АКСЕССУАРЫ"#}
+            <div style="padding-bottom: 25px">
+                <select name="name_cloth" class="form-select" onchange="form.submit()">
+                  <option selected disabled>ОДЕЖДА</option>
+
+                  <option value="Брюки">Брюки</option>
+                  <option value="Джемпер">Джемпер</option>
+                  <option value="Джинсы">Джинсы</option>
+                  <option value="Пальто">Пальто</option>
+                </select>
+            </div>
+
+        </form>
+
+{#            Чтобы НЕ нажимать КНОПКУ (type="submit") (см. ниже) для подтверждения отправки, мы можем прописать#}
+{#            в <select onchange="form.submit()"> - тогда при выборе нужного значения - #}
+{#            сортировка происходит автоматически  !!!#}
+
+        {#Тег <option> определяет опцию - "Выберите из ВЫПАДАЮЩЕГО списка". <option> помещаются внутрь <select> #}
+        {#Тег можно использовать без каких-либо атрибутов, но Обычно требуется атрибут value, который указывает, #}
+        {#что отправляется на сервер при отправке формы.#}
 
           <hr/>
 
@@ -30,24 +183,22 @@
 {#            Чтобы НЕ нажимать КНОПКУ (type="submit") (см. ниже) для подтверждения отправки, мы можем прописать#}
 {#            в <select onchange="form.submit()"> - тогда при выборе нужного значения - #}
 {#            сортировка происходит автоматически  !!!#}
+            <div>
+              <select name="select_value" class="form-select" onchange="form.submit()">
+                <option selected disabled>Сортировка:</option>
 
-            <select name="select_value" class="form-select" onchange="form.submit()">
-              <option selected disabled>Сортировка:</option>
+                <optgroup label="По цене:">
+                    <option value="value1">по возрастанию</option>
+                    <option value="value2">по убыванию</option>
+                </optgroup>
 
-              <optgroup label="По цене:">
-                  <option value="value1">по возрастанию</option>
-                  <option value="value2">по убыванию</option>
-              </optgroup>
+                <optgroup label="По имени:">
+                    <option value="value3">от А до Я</option>
+                    <option value="value4">от Я до А</option>
+                </optgroup>
+              </select>
+            </div>
 
-              <optgroup label="По имени:">
-                  <option value="value3">от А до Я</option>
-                  <option value="value4">от Я до А</option>
-              </optgroup>
-            </select>
-
-                {#Тег <option> определяет опцию - "Выберите из ВЫПАДАЮЩЕГО списка". <option> помещаются внутрь <select> #}
-                {#Тег можно использовать без каких-либо атрибутов, но Обычно требуется атрибут value, который указывает, #}
-                {#что отправляется на сервер при отправке формы.#}
 
 {#            <div style="padding-top: 10px">#}
 {#                <input type="submit" value="Найти">#}

@@ -9,7 +9,7 @@ class Category(models.Model):                       # КАТЕГОРИИ ТОВ�
     Смотри шаблон products/all_products.html
     Либо использовать ТЕГ {% url 'products-by-category' cat.id %}, 
     я предпочитаю создавать МЕТОДЫ в МОДЕЛИ и использовать их вместо {% url %}. """
-    # МЕТОД через get_absolute_url:
+    # ЭТО МЕТОД через get_absolute_url():
     # def get_absolute_url(self):
     #     return reverse('products-by-category', kwargs={'category_id': self.id})
 

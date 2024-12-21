@@ -60,7 +60,7 @@ def get_products_list(request):
 #     return render(request, 'products/all_products.html', data)
 
 
-# 1. Вариант Фильтр по категориям, если делать ссылку на категорию - НЕ через CHECKBOX. РАБОЧИЙ ВАРИАНТ !!!
+# 1. Вариант Фильтр по категориям, если делать ССЫЛКУ на категорию - НЕ через CHECKBOX. РАБОЧИЙ ВАРИАНТ !!!
 # def get_products(request, category_id=None):
 #     category_list = Category.objects.all()
 #
@@ -82,6 +82,8 @@ def get_products_list(request):
 def get_products(request, season_id=None):
     season_list = Season.objects.all()
     category_list = Category.objects.all() # Для бокового фильтра через checkbox!
+    name_list = Product.objects.values('name_product').order_by('name_product').distinct('name_product')
+                                           # Для def get_config - см. ниже!
 
     if season_id:
         season = Season.objects.get(id=season_id)
@@ -97,8 +99,153 @@ def get_products(request, season_id=None):
         'categories': category_list, # Для бокового фильтра через checkbox!
         'seasons': season_list,
         'products': products,
+        'name_list': name_list # Для выпадающего списка - "СПИСОК ТОВАРОВ":
     }
     return render(request, 'products/all_products.html', data)
+
+
+def get_typ_value_dropdown(request, typ, value):
+    """ Выпадающий саисок через ССЫЛКУ ! (НЕ через SELECT / <option>) """
+    season_list = Season.objects.all()
+    category_list = Category.objects.all()  # Для бокового фильтра через checkbox!
+    name_list = Product.objects.values('name_product').order_by('name_product').distinct('name_product')
+
+    if typ == 'category':
+        products_list = Product.objects.filter(category__name_category=value).filter(is_deleted=False)
+    elif typ == 'name_product':
+        products_list = Product.objects.filter(name_product=value).filter(is_deleted=False)
+    else:
+        products_list = Product.objects.filter(is_deleted=False)
+
+    data = {
+        'products': products_list,
+        'categories': category_list,
+        'seasons': season_list,
+        'name_list': name_list
+    }
+    return render(request, 'products/all_products.html', data)
+
+
+# def get_value_dropdown(request, value):
+#     """ Выпадающий список через ССЫЛКУ ! (НЕ через SELECT / <option>) """
+#     season_list = Season.objects.all()
+#     category_list = Category.objects.all()  # Для бокового фильтра через checkbox!
+#     name_list = Product.objects.values('name_product').order_by('name_product').distinct('name_product')
+#                                                                         # Для def get_config - см. ниже!
+#     products_list = Product.objects.filter(is_deleted=False)
+#     if (value == 'Брюки' or value == 'Джемпер' or value == 'Джинсы' or value == 'Пальто' or value == 'Ботинки' or
+#             value == 'Туфли' or value == 'Кроссовки' or value == 'Галстук' or value == 'Ремень'):
+#         products_list = products_list.filter(name_product=value).filter(is_deleted=False)
+#
+#         data = {
+#             'products': products_list,
+#             'categories': category_list,  # Для бокового фильтра через checkbox!
+#             'seasons': season_list,
+#             'name_list': name_list        # Для выпадающего списка - "СПИСОК ТОВАРОВ":
+#         }
+#         return render(request, 'products/all_products.html', data)
+
+
+#   1 ВАРИАНТ: через "name_category"
+# def get_value_dropdown_category(request, value):
+#     """ Выпадающий список "КАТЕГОРИИ" через ССЫЛКУ ! (НЕ через SELECT / <option>) """
+#     season_list = Season.objects.all()
+#     category_list = Category.objects.all()  # Для бокового фильтра через checkbox!
+#     name_list = Product.objects.values('name_product').order_by('name_product').distinct('name_product')
+#                                                                         # Для def get_config - см. ниже!
+#     products_list = Product.objects.filter(category__name_category=value).filter(is_deleted=False)
+#
+#     data = {
+#         'products': products_list,
+#         'categories': category_list,  # Для бокового фильтра через checkbox!
+#         'seasons': season_list,
+#         'name_list': name_list  # Для выпадающего списка - "СПИСОК ТОВАРОВ":
+#     }
+#     return render(request, 'products/all_products.html', data)
+
+
+#     2 ВАРИАНТ: через id категории
+# def get_value_dropdown_category(request, value):
+#     """ Выпадающий список "КАТЕГОРИИ" через ССЫЛКУ ! (НЕ через SELECT / <option>) """
+#     season_list = Season.objects.all()
+#     category_list = Category.objects.all()  # Для бокового фильтра через checkbox!
+#     name_list = Product.objects.values('name_product').order_by('name_product').distinct('name_product')
+#                                                                         # Для def get_config - см. ниже!
+#     products_list = Product.objects.filter(is_deleted=False)
+#     category = Category.objects.get(id=value)
+#     if category:
+#         products_list = products_list.filter(category__id=value).filter(is_deleted=False)
+#
+#         data = {
+#             'products': products_list,
+#             'categories': category_list,  # Для бокового фильтра через checkbox!
+#             'seasons': season_list,
+#             'name_list': name_list  # Для выпадающего списка - "СПИСОК ТОВАРОВ":
+#         }
+#         return render(request, 'products/all_products.html', data)
+
+
+    # P.S. Для выпадающего списка - "СПИСОК ТОВАРОВ":
+    # Используем МЕТОДЫ: .values() и .order_by() и .distinct() !!! см. ниже !!!
+    # Получаем список уникальных названий продуктов (т.е.продукты в выпадающем списке будут без повторов!!!):
+
+    # МЕТОД distinct() возвращает новый QuerySet, который использует SELECT DISTINCT в своем SQL - запросе.
+    # Это исключает повторяющиеся строки из рез-тов запроса. По умолчанию QuerySet не удаляет повторяющиеся строки.
+
+    # МЕТОД values() возвращает словари ! Мы можем извлекать только те поля, которые нам требуются,
+    # передавая их имена в качестве аргументов!
+    # < QuerySet[{'name_product': 'Ботинки'}, {'name_product': 'Брюки'}, {'name_product': 'Галстук'},
+    # {'name_product': 'Джемпер'}, {'name_product': 'Джинсы'}, {'name_product': 'Кроссовки'},
+    # {'name_product': 'Пальто'}, {'name_product': 'Ремень'}, {'name_product': 'Туфли'}] >
+
+
+# def get_config_value_products(request, config=None, value=None):
+def get_config(request):
+    if request.method == 'POST':
+        category_list = Category.objects.all()
+        season_list = Season.objects.all()
+        products_list = Product.objects.filter(is_deleted=False)
+
+        # Для выпадающего списка - "СПИСОК ТОВАРОВ":
+        name_list = products_list.values('name_product').order_by('name_product').distinct('name_product')
+        # print(name_list)  # Чтобы посмотреть что получилось!
+
+        # Пробовал:
+        # name_list = Product.objects.values_list('name_product', flat=True).distinct()
+        # name_list = Product.objects.order_by('name_product').distinct('name_product')
+
+        # name_list = []
+        # for name in name_list:
+        #     if name not in name_list:
+        #         name_list.append(name)
+
+        category_id = request.POST.get('category_id')  # берем из шаблона из: name="category_id"!
+
+        name_select = request.POST.get('name_prod')  # получаем одно нужное значение из шаблона - name="name_prod"!
+
+        cloth_name_value = request.POST.get('name_cloth') # берем одно значение из шаблона из: name="name_cloth"!
+        # print(cloth_name_value) # Чтобы посмотреть какое value выбралось: "Брюки", "Джемпер", "Джинсы", "Пальто" !!!
+
+        if category_id:
+            category = Category.objects.get(id=category_id)
+            products_list = products_list.filter(category=category).filter(is_deleted=False)
+
+        elif name_select:
+            products_list = products_list.filter(name_product=name_select).filter(is_deleted=False)
+
+        elif cloth_name_value:
+            products_list = products_list.filter(name_product=cloth_name_value).filter(is_deleted=False)
+
+        else:
+            products_list = Product.objects.filter(is_deleted=False)
+
+        data = {
+            'categories': category_list,
+            'seasons': season_list,
+            'products': products_list,
+            'name_list': name_list,
+        }
+        return render(request, 'products/all_products.html', data)
 
 
 def get_sorted_products(request):
@@ -206,42 +353,14 @@ def checkbox_products(request):
 #     return render(request, 'products/all_products.html', data)
 
 
-def get_products_by_filter(request, config: str, value: str):
-    # products = Product.objects.filter(**{config: value})
-    # category_list = Category.objects.all()
-    # season_list = Season.objects.all()
-    # config = ['category', 'season', 'name_product', 'color'][int(config) - 1]
-
-    if config == 'category':
-        products = Product.objects.filter(category__name_category=value).filter(is_deleted=False)
-    elif config == 'season':
-        products = Product.objects.filter(season__name_season=value).filter(is_deleted=False)
-    elif config == 'name_product':
-        products = Product.objects.filter(name_product=value).filter(is_deleted=False)
-    elif config == 'color':
-        products = Product.objects.filter(color=value).filter(is_deleted=False)
-    else:
-        products = Product.objects.filter(is_deleted=False)
-
-    data = {
-        # 'categories': category_list,
-        # 'seasons': season_list,
-        'products': products,
-        # dict: {'config': config, 'value': value},
-        # 'config': config,
-        # 'value': value
-    }
-    return render(request, 'products/filter_type_value.html', data)
-
-
 def add_product(request):
     if request.method == 'POST':
-        name_product = request.POST.get('name_product')
-        color = request.POST.get('color')
-        category_id = request.POST.get('category_id')
-        season_id = request.POST.get('season_id')
-        image = request.FILES.get('image')
-        # is_deleted = request.POST.get('is_deleted')
+        name_product = request.POST.get('name_product') # name="name_product" из шаблона add_product.html
+        color = request.POST.get('color')               # name="color" из шаблона add_product.html
+        category_id = request.POST.get('category_id')   # name="category_id" из шаблона add_product.html
+        season_id = request.POST.get('season_id')       # name="season_id" из шаблона add_product.html
+        image = request.FILES.get('image')              # name="image" из шаблона add_product.html
+        # is_deleted = request.POST.get('is_deleted')#
 
         category = Category.objects.get(id=category_id)
         season = Season.objects.get(id=season_id)
@@ -255,7 +374,7 @@ def add_product(request):
         )
         product.save()
 
-        images = request.FILES.getlist('images_for_getlist')
+        images = request.FILES.getlist('images_for_getlist') # name="images_for_getlist" из шаблона add_product.html
 
         for image in images:
             # img = ProductImage(product=product, image=image)
@@ -290,7 +409,7 @@ def product_details(request, product_id):
 
 
 def delete_product(request, product_id):
-    product = Product.objects.get(id=product_id, name=id)
+    product = Product.objects.get(id=product_id)
     product.is_deleted = True
     product.save()
     return HttpResponseRedirect(reverse('get-products-list'))

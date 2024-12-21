@@ -19,6 +19,10 @@ urlpatterns = [
 
     path('checkbox/', views.checkbox_products, name='checkbox-products'),
 
-    # path('get-products-by-filter/<str:сonfig>/<str:value>/', views.get_products_by_filter, name='get-products-by-filter'),
-    # path('<str:сonfig>, <str:value>/get-products-by-filter/', views.get_products_by_filter, name='get-products-by-filter'),
+    path('get-config/', views.get_config, name='get-config'),
+
+    # path('get-dropdown/<str:value>', views.get_value_dropdown, name='get-dropdown'),
+    # path('get-dropdown-category/<str:value>', views.get_value_dropdown_category, name='get-dropdown-category'),
+
+    path('get-typ-value-dropdown/<str:typ>/<str:value>', views.get_typ_value_dropdown, name='get-typ-value-dropdown'),
 ]
