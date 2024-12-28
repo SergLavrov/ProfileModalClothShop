@@ -105,7 +105,7 @@ def get_products(request, season_id=None):
 
 
 def get_typ_value_dropdown(request, typ, value):
-    """ Выпадающий саисок через ССЫЛКУ ! (НЕ через SELECT / <option>) """
+    """ Выпадающий список через ССЫЛКУ ! (НЕ через SELECT / <option>) """
     season_list = Season.objects.all()
     category_list = Category.objects.all()  # Для бокового фильтра через checkbox!
     name_list = Product.objects.values('name_product').order_by('name_product').distinct('name_product')
@@ -208,6 +208,7 @@ def get_config(request):
 
         # Для выпадающего списка - "СПИСОК ТОВАРОВ":
         name_list = products_list.values('name_product').order_by('name_product').distinct('name_product')
+        # для использования в шаблоне --> см. {% for p in name_list %}
         # print(name_list)  # Чтобы посмотреть что получилось!
 
         # Пробовал:
@@ -296,19 +297,19 @@ def checkbox_products(request):
 
         products_list = Product.objects.all().filter(is_deleted=False)
 
-        # 1 Вариант через "name_categories_list"
+        # 1. Вариант через "name_categories_list"
         # if name_categories_list:
         #     products_list = products_list.filter(category__name_category__in=name_categories_list).filter(is_deleted=False)
 
-        # 2 Вариант через "id_categories_list"
+        # 1.1 Вариант через "id_categories_list"
         if id_categories_list:
             products_list = products_list.filter(category__id__in=id_categories_list).filter(is_deleted=False)
 
-        # 1 Вариант через "name_seasons_list"
+        # 2. Вариант через "name_seasons_list"
         # if name_seasons_list:
         #     products_list = products_list.filter(season__name_season__in=name_seasons_list).filter(is_deleted=False)
 
-        # 2 Вариант через "id_seasons_list"
+        # 2.1 Вариант через "id_seasons_list"
         if id_seasons_list:
             products_list = products_list.filter(season__id__in=id_seasons_list).filter(is_deleted=False)
 

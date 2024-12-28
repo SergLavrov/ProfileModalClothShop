@@ -7,9 +7,79 @@
           box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
           transition: all .3s;
       }
+
       .card:hover {
           box-shadow: 0 14px 30px -15px rgba(0, 0, 0, 1.5);
       }
+
+      {#Для ВЫПАДАЮЩЕГО CHECKBOX#}
+
+      {#ВАРИАНТ 10 (через <ul> / <li>) - Checkbox 1 #}
+      .dropdown {                  {#курсор-указатель (рука) для пользователя#}
+          display: inline-block;
+          cursor: pointer;
+      }
+      .dropdown > span {
+          border: 1px solid #030811;
+          padding: 6px;
+          border-radius: 4px;
+          margin-bottom: 15px;
+      }
+      .dropdown:hover > span {
+          background-color: rgb(255, 255, 255);
+      }
+      .dropdown ul {
+          display: none;
+          position: absolute;
+          background: rgba(162, 162, 162, 0.57);
+          list-style-type: none;
+          {#padding: 0;#}
+          padding: 9px 16px;
+      }
+      .dropdown:hover ul {    {#плавное появление списка при наведении#}
+          display: block;
+      }
+      {#.dropdown input[type='checkbox'] {    {#добавление пространства вокруг чекбокса#}
+      {#    margin-right: 20px;#}
+      {#}#}
+
+      {#ВАРИАНТ 11 - Checkbox 2 #}
+      .dropbtn {
+          background-color: rgb(105, 116, 136);
+          color: #030811;
+          padding: 8px;
+          font-size: 16px;
+          border: none;
+          border-radius: 6px;
+      }
+      .dropdown {
+          position: relative;
+          display: inline-block;
+      }
+      .dropdown-content {
+          display: none;
+          position: marker;
+          background-color: rgba(162, 162, 162, 0.57);
+          min-width: 205px;
+          box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+          z-index: 1;
+      }
+      .dropdown-content a {
+          color: black;
+          padding: 12px 16px;
+          text-decoration: none;
+          display: block;
+      }
+      .dropdown-content a:hover {
+          background-color: #ddd;
+      }
+      .dropdown:hover .dropdown-content {
+          display: block;
+      }
+      .dropdown:hover .dropbtn {
+          background-color: rgb(152, 149, 189);
+      }
+
   </style>
 
 {#  <h4 class="text-center" style="padding-top: 20px; font-family: cursive; font-size: 22px">Список товаров</h4>#}
@@ -18,7 +88,7 @@
 
     <div class="row content">
 
-      <div class="col-sm-2 pl-4 pr-4" style="background-color: lightgrey; height: 1130px; position: sticky; top: 30px;">
+      <div class="col-sm-2 pl-4 pr-4" style="background-color: lightgrey; height: 1600px; position: sticky; top: 30px;">
 
       {#          <div>#}
 {#            """ Фильтрация по "сезону" товара ЧЕРЕЗ ССЫЛКУ """#}
@@ -42,7 +112,7 @@
             КАТЕГОРИИ
           </a>
 {#         """ Выпадающий саисок через ССЫЛКУ ! (НЕ через SELECT / <option>) """#}
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu dropdown-menu-dark">
 
             {% for cat in categories %}
               <li>
@@ -244,6 +314,7 @@
 {#            </ul>#}
 {#          </div>#}
 
+{#            """ Фильтрация товаров ЧЕРЕЗ CHECKBOX """#}
           <form method="post" action="{% url 'checkbox-products' %}">
             {% csrf_token %}
 
@@ -299,7 +370,7 @@
 
               <hr/>
 
-{#              1 Вариант#}
+{#              1 Вариант - "Перечень ВСЕХ товаров по имени"#}
               <label style="padding-left: 20px; font-family: inherit; font-size: 18px"><b>Перечень</b></label>
               <br/>
               <input type="checkbox" class="form-check-input" name="prod_names" value="Джемпер" id="pr1">
@@ -365,6 +436,218 @@
                 <button type="submit" value="Найти" class="btn btn-outline-secondary">Найти</button>
             </div>
           </form>
+
+          <hr/>
+
+{#          ВАРИАНТы Для выпадающего списка из CHECKBOX !!!#}
+
+{#          Вариант 10 (через <ul> / <li>) - "выпадающий список (за счет стилей CSS - см. вверху) #}
+{#          появляется при "наведении курсора" на поле <Перечень Checkbox 1>#}
+          <form method="post" action="{% url 'checkbox-products' %}">
+            {% csrf_token %}
+
+            <div class="dropdown" style="padding-bottom: 15px">
+              <span>Перечень Checkbox 1</span>
+
+              <ul>
+                <li>
+                  <input type="checkbox" class="form-check-input" name="prod_names" value="Джемпер" id="pr1">
+                  <label for="pr1" class="form-check-label">Джемпер</label>
+                </li>
+                <li>
+                  <input type="checkbox" class="form-check-input" name="prod_names" value="Ботинки" id="pr2">
+                  <label for="pr2" class="form-check-label">Ботинки</label>
+                </li>
+                <li>
+                  <input type="checkbox" class="form-check-input" name="prod_names" value="Туфли" id="pr3">
+                  <label for="pr3" class="form-check-label">Туфли</label>
+                </li>
+                <li>
+                  <input type="checkbox" class="form-check-input" name="prod_names" value="Галстук" id="pr4">
+                  <label for="pr4" class="form-check-label">Галстук</label>
+                </li>
+                <li>
+                  <input type="checkbox" class="form-check-input" name="prod_names" value="Ремень" id="pr5">
+                  <label for="pr5" class="form-check-label">Ремень</label>
+                </li>
+                <li>
+                  <input type="checkbox" class="form-check-input" name="prod_names" value="Брюки" id="pr6">
+                  <label for="pr6" class="form-check-label">Брюки</label>
+                </li>
+                <li>
+                  <input type="checkbox" class="form-check-input" name="prod_names" value="Пальто" id="pr7">
+                  <label for="pr7" class="form-check-label">Пальто</label>
+                </li>
+                <li>
+                  <input type="checkbox" class="form-check-input" name="prod_names" value="Кроссовки" id="pr8">
+                  <label for="pr8" class="form-check-label">Кроссовки</label>
+                </li>
+                <li>
+                  <input type="checkbox" class="form-check-input" name="prod_names" value="Джинсы" id="pr9">
+                  <label for="pr9" class="form-check-label">Джинсы</label>
+                </li>
+                <li>
+                  <input style="margin-top: 10px" type="submit" value="Найти">
+                </li>
+              </ul>
+            </div>
+          </form>
+
+          <hr/>
+
+{#        Вариант 11 - "выпадающий список (за счет стилей CSS - см. вверху)#}
+{#          появляется "при наведении курсора" на поле <Перечень Checkbox 2>#}
+          <form method="post" action="{% url 'checkbox-products' %}">
+            {% csrf_token %}
+
+            <div class="dropdown" style="padding-bottom: 15px">
+
+              <button class="dropbtn">Перечень Checkbox 2</button>
+              <div class="dropdown-content">
+                <input type="checkbox" class="form-check-input" name="prod_names" value="Джемпер" id="pr1">
+                <label for="pr1" class="form-check-label">Джемпер</label>
+                <br/>
+                <input type="checkbox" class="form-check-input" name="prod_names" value="Ботинки" id="pr2">
+                <label for="pr2" class="form-check-label">Ботинки</label>
+                <br/>
+                <input type="checkbox" class="form-check-input" name="prod_names" value="Туфли" id="pr3">
+                <label for="pr3" class="form-check-label">Туфли</label>
+                <br/>
+                <input type="checkbox" class="form-check-input" name="prod_names" value="Галстук" id="pr4">
+                <label for="pr4" class="form-check-label">Галстук</label>
+                <br/>
+                <input type="checkbox" class="form-check-input" name="prod_names" value="Ремень" id="pr5">
+                <label for="pr5" class="form-check-label">Ремень</label>
+                <br/>
+                <input type="checkbox" class="form-check-input" name="prod_names" value="Брюки" id="pr6">
+                <label for="pr6" class="form-check-label">Брюки</label>
+                <br/>
+                <input type="checkbox" class="form-check-input" name="prod_names" value="Пальто" id="pr7">
+                <label for="pr7" class="form-check-label">Пальто</label>
+                <br/>
+                <input type="checkbox" class="form-check-input" name="prod_names" value="Кроссовки" id="pr8">
+                <label for="pr8" class="form-check-label">Кроссовки</label>
+                <br/>
+                <input type="checkbox" class="form-check-input" name="prod_names" value="Джинсы" id="pr9">
+                <label for="pr9" class="form-check-label">Джинсы</label>
+                <br/>
+                <div style="padding-top: 12px">
+                  <input type="submit" value="Найти">
+                </div>
+              </div>
+             </div>
+
+{#          <div>#}
+            {#                <input type="submit" value="Найти">#}
+{#            <a href="{% url 'get-products' %}" class="btn btn-outline-secondary">К списку</a>#}
+{#            <button type="submit" value="Найти" class="btn btn-outline-secondary">Найти</button>#}
+{#          </div>#}
+          </form>
+
+
+{#        ВАРИАНТ 3#}
+{#        """ Выпадающий список из Checkbox появляется при нажатии на кнопку - <button type="button>#}
+
+{#          ОБЪЯСНЕНИЕ примера:#}
+{#          (ВСЕ варианты подровбнее см. на: https://www.w3schools.com/bootstrap5/bootstrap_dropdowns.php)#}
+
+{#          - Класс .dropdown указывает на "раскрывающееся меню" !#}
+{##}
+{#          - Чтобы открыть раскрывающееся меню, используйте кнопку или ссылку с классом .dropdown-toggle #}
+{#            и атрибутом data-bs-toggle="dropdown".#}
+{##}
+{#          - Добавьте класс .dropdown-menu к элементу-контейнеру, например <div> или <ul>, #}
+{#            чтобы фактически создать раскрывающееся меню. #}
+{#            Затем добавьте класс .dropdown-item к каждому элементу (ссылкам или кнопкам) внутри раскрывающегося меню.#}
+{#        """#}
+        <form method="post" action="{% url 'checkbox-products' %}">
+          {% csrf_token %}
+{#          """#}
+{#          Для ПРИМЕРА -  можно создать меню "dropend" или "dropstart", добавив класс .dropend или .dropstart #}
+{#          к раскрывающемуся элементу - тогда "раскрывающееся меню" будет по раскрываться "В Лево / право" !#}
+{#            <div class="dropdown dropend">#}
+{#          """#}
+          <div class="dropdown3" style="padding-bottom: 15px">
+
+            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+              Перечень Checkbox 3
+            </button>
+            <ul class="dropdown-menu" style="background-color: lightgrey">
+              <li>
+                <input type="checkbox" class="form-check-input" name="prod_names" value="Джемпер" id="pr1">
+                <label for="pr1" class="form-check-label">Джемпер</label>
+              </li>
+              <li>
+                <input type="checkbox" class="form-check-input" name="prod_names" value="Ботинки" id="pr2">
+                <label for="pr2" class="form-check-label">Ботинки</label>
+              </li>
+              <li>
+                <input type="checkbox" class="form-check-input" name="prod_names" value="Туфли" id="pr3">
+                <label for="pr3" class="form-check-label">Туфли</label>
+              </li>
+              <li>
+                <input type="checkbox" class="form-check-input" name="prod_names" value="Галстук" id="pr4">
+                <label for="pr4" class="form-check-label">Галстук</label>
+              </li>
+              <li>
+                <input type="checkbox" class="form-check-input" name="prod_names" value="Ремень" id="pr5">
+                <label for="pr5" class="form-check-label">Ремень</label>
+              </li>
+              <li>
+                <input type="checkbox" class="form-check-input" name="prod_names" value="Брюки" id="pr6">
+                <label for="pr6" class="form-check-label">Брюки</label>
+              </li>
+              <li>
+                <input type="checkbox" class="form-check-input" name="prod_names" value="Пальто" id="pr7">
+                <label for="pr7" class="form-check-label">Пальто</label>
+              </li>
+              <li>
+                <input type="checkbox" class="form-check-input" name="prod_names" value="Кроссовки" id="pr8">
+                <label for="pr8" class="form-check-label">Кроссовки</label>
+              </li>
+              <li>
+                <input type="checkbox" class="form-check-input" name="prod_names" value="Джинсы" id="pr9">
+                <label for="pr9" class="form-check-label">Джинсы</label>
+              </li>
+
+              <li style="padding-top: 12px">
+                <input type="submit" value="Найти">
+              </li>
+            </ul>
+
+          </div>
+        </form>
+
+
+        {#  ВАРИАНТ 4 - СЕЗОНЫ (также можно сделать КАТЕГОРИИ#}
+{#        Выпадающий список из Сheckbox появляется при нажатии на кнопку! #}
+{#        СЕЗОНЫ через цикл - {% for s in seasons %} !!!#}
+        <form method="post" action="{% url 'checkbox-products' %}">
+          {% csrf_token %}
+
+          <div class="dropdown4" style="padding-bottom: 15px">
+
+            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+              Сезон Checkbox 4
+            </button>
+            <div class="dropdown-menu" style="background-color: lightgrey">
+
+              {% for s in seasons %} {# seasons берем из data из views #}
+                <label>
+                    <input type="checkbox" class="form-check-input" name="seasons" value="{{ s.id }}">
+                    <span>{{ s.name_season }}</span>
+                </label>
+                <br/>
+              {% endfor %}
+
+              <div style="padding-top: 12px">
+                <input type="submit" value="Найти">
+              </div>
+            </div>
+
+          </div>
+        </form>
+
       </div>
 
 
