@@ -23,7 +23,7 @@
           border: 1px solid #030811;
           padding: 6px;
           border-radius: 4px;
-          margin-bottom: 15px;
+          {#margin-bottom: 25px;#}
       }
       .dropdown:hover > span {
           background-color: rgb(255, 255, 255);
@@ -60,9 +60,9 @@
           display: none;
           position: marker;
           background-color: rgba(162, 162, 162, 0.57);
-          min-width: 205px;
-          box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-          z-index: 1;
+          {#min-width: 205px;#}
+          {#box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);#}
+          {#z-index: 1;#}
       }
       .dropdown-content a {
           color: black;
@@ -70,10 +70,7 @@
           text-decoration: none;
           display: block;
       }
-      .dropdown-content a:hover {
-          background-color: #ddd;
-      }
-      .dropdown:hover .dropdown-content {
+      .dropdown:hover .dropdown-content {   {#без него не выпадает список#}
           display: block;
       }
       .dropdown:hover .dropbtn {
@@ -81,6 +78,55 @@
       }
 
   </style>
+
+{# """#}
+{#  ТЕГОВЫЕ СТРАНИЦЫ - это своего рода категории, выведенные на основе общего признака!#}
+{#                    Теговые страницы могут в целом быть полезны на любом сайте, #}
+{#                    где предложения получается систематизировать по общему признаку.#}
+{# """#}
+{#  ВАРИАНТ А) Сгруппированные кнопки с выпадающим списком:#}
+{#  https://www.w3schools.com/bootstrap5/bootstrap_dropdowns.php#}
+
+  <div class="btn-group" style="padding-bottom: 20px; padding-left: 90px;">
+    <a class="btn btn-outline-secondary" href="{% url 'get-typ-value-dropdown' typ='season' value='Лето' %}">Лето</a>
+    <a class="btn btn-outline-secondary" href="{% url 'get-typ-value-dropdown' typ='season' value='Зима' %}">Зима</a>
+    <a class="btn btn-outline-secondary" href="{% url 'get-typ-value-dropdown' typ='season' value='Весна' %}">Весна</a>
+    <a class="btn btn-outline-secondary" href="{% url 'get-typ-value-dropdown' typ='season' value='Осень' %}">Осень</a>
+    <div class="btn-group">
+      <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">Link</button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="#">Tablet</a></li>
+        <li><a class="dropdown-item" href="#">Smartphone</a></li>
+      </ul>
+    </div>
+  </div>
+
+{#  ВАРИАНТ Б) "Контур кнопки" - Bootstrap 5 также предоставляет восемь кнопок с контуром/рамкой.#}
+{#  https://www.w3schools.com/bootstrap5/bootstrap_buttons.php#}
+  <div style="padding-bottom: 20px; padding-left: 90px;">
+    <a class="btn btn-outline-primary btn-sm" href="{% url 'get-typ-value-dropdown' typ='season' value='Лето' %}">
+      Лето
+    </a>
+    <a class="btn btn-outline-primary btn-sm" href="{% url 'get-typ-value-dropdown' typ='season' value='Зима' %}">
+      Зима
+    </a>
+    <a class="btn btn-outline-primary btn-sm" href="{% url 'get-typ-value-dropdown' typ='season' value='Весна' %}">
+      Весна
+    </a>
+    <a class="btn btn-outline-primary btn-sm" href="{% url 'get-typ-value-dropdown' typ='season' value='Осень' %}">
+      Осень
+    </a>
+{#    По цветам:#}
+    <a class="btn btn-outline-primary btn-sm" href="{% url 'get-typ-value-dropdown' typ='color' value='Белый' %}">
+      Белый
+    </a>
+    <a class="btn btn-outline-primary btn-sm" href="{% url 'get-typ-value-dropdown' typ='color' value='Синий' %}">
+      Синий
+    </a>
+    <a class="btn btn-outline-primary btn-sm" href="{% url 'get-typ-value-dropdown' typ='color' value='Серый' %}">
+      Серый
+    </a>
+  </div>
 
 {#  <h4 class="text-center" style="padding-top: 20px; font-family: cursive; font-size: 22px">Список товаров</h4>#}
 
@@ -121,14 +167,29 @@
 
 {#                1.1 ВАРИАНТ: через 2 входных параметра - def get_typ_value_dropdown(request, typ, value):#}
                   <a class="dropdown-item" href="{% url 'get-typ-value-dropdown' typ='category' value=cat.name_category %}">
-                    {{ cat.name_category }}</a>
+                    {{ cat.name_category }}
+                  </a>
 
 {#                2 ВАРИАНТ: через id категории  - def get_value_dropdown_category(request, value)#}
 {#                  <a class="dropdown-item" href="{% url 'get-dropdown-category' value=cat.id %}">#}
 {#                    {{ cat.name_category }}</a>#}
               </li>
             {% endfor %}
+          </ul>
 
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              СЕЗОН
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            {% for s in seasons %}
+              <li>
+{#                1.1 ВАРИАНТ: через 2 входных параметра - def get_typ_value_dropdown(request, typ, value):#}
+                <a class="dropdown-item"
+                   href="{% url 'get-typ-value-dropdown' typ='season' value=s.name_season %}">
+                  {{ s.name_season }}
+                </a>
+              </li>
+            {% endfor %}
           </ul>
         </ul>
 

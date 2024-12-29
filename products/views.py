@@ -112,10 +112,17 @@ def get_typ_value_dropdown(request, typ, value):
 
     if typ == 'category':
         products_list = Product.objects.filter(category__name_category=value).filter(is_deleted=False)
+    elif typ == 'season':
+        products_list = Product.objects.filter(season__name_season=value).filter(is_deleted=False)
     elif typ == 'name_product':
         products_list = Product.objects.filter(name_product=value).filter(is_deleted=False)
+    elif typ == 'color':
+        products_list = Product.objects.filter(color=value).filter(is_deleted=False)
     else:
         products_list = Product.objects.filter(is_deleted=False)
+
+    if not products_list:
+        return render(request, 'products/nothing_is_find.html')
 
     data = {
         'products': products_list,
