@@ -33,10 +33,13 @@ class Product(models.Model):
     class Meta:
         ordering = ['id']
 
-    def __str__(self):
-        return self.name_product, self.price
+    # def __str__(self):
+    #     return self.name_product, self.price
 
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, default=None, on_delete=models.CASCADE)
     image = models.ImageField('/product_image/')
+
+
+

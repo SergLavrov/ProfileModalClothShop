@@ -3,6 +3,7 @@ from products.models import Product, Category, Season, ProductImage
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 # from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 
 
 def get_products_list(request):
@@ -79,32 +80,34 @@ def get_products_list(request):
 
 
 # 1.1 Вариант Фильтр по сезонам, если делать ЧЕРЕЗ ССЫЛКУ на сезон - НЕ через CHECKBOX. РАБОЧИЙ ВАРИАНТ !!!
-def get_products(request, season_id=None):
+def get_products(request, season_id=None, page_number=1):  # по умолчанию selected_page - страница №1
     season_list = Season.objects.all()
     category_list = Category.objects.all() # Для бокового фильтра через checkbox!
     name_list = Product.objects.values('name_product').order_by('name_product').distinct('name_product')
                                            # Для def get_config - см. ниже!
-
     if season_id:
         season = Season.objects.get(id=season_id)
-        products = Product.objects.filter(season=season).filter(is_deleted=False)
+        products_list = Product.objects.filter(season=season).filter(is_deleted=False)
 
-        if not products:
+        if not products_list:
             return render(request, 'products/nothing_is_find.html')
-
     else:
-        products = Product.objects.filter(is_deleted=False)
+        products_list = Product.objects.filter(is_deleted=False)
+
+    per_page = 8                                    # переменная per_page - Количество продуктов на странице!
+    paginator = Paginator(products_list, per_page)  # В перем. paginator - передаем products (все продукты) и per_page
+    products_paginator = paginator.page(page_number) # здесь передаем page_number - № выбранной страницы
 
     data = {
         'categories': category_list, # Для бокового фильтра через checkbox!
         'seasons': season_list,
-        'products': products,
-        'name_list': name_list # Для выпадающего списка - "СПИСОК ТОВАРОВ":
+        'products': products_paginator, # в data уже передаем products_list (все продукты) c учетом перем. paginator !
+        'name_list': name_list,          # Для выпадающего списка - "СПИСОК ТОВАРОВ":
     }
     return render(request, 'products/all_products.html', data)
 
 
-def get_typ_value_dropdown(request, typ, value):
+def get_typ_value_dropdown(request, typ, value, page_number=1):
     """ Выпадающий список через ССЫЛКУ ! (НЕ через SELECT / <option>) """
     season_list = Season.objects.all()
     category_list = Category.objects.all()  # Для бокового фильтра через checkbox!
@@ -124,11 +127,16 @@ def get_typ_value_dropdown(request, typ, value):
     if not products_list:
         return render(request, 'products/nothing_is_find.html')
 
+    per_page = 8  # переменная per_page - Количество продуктов на странице!
+    paginator = Paginator(products_list, per_page)  # В перем. paginator - передаем products (все продукты) и per_page
+    products_paginator = paginator.page(page_number)  # здесь передаем page_number - № выбранной страницы
+
     data = {
-        'products': products_list,
+        # 'products': products_list,
+        'products': products_paginator,
         'categories': category_list,
         'seasons': season_list,
-        'name_list': name_list
+        'name_list': name_list,
     }
     return render(request, 'products/all_products.html', data)
 

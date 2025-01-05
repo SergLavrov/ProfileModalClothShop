@@ -322,12 +322,10 @@ def delete_profile_user(request):
         return HttpResponseRedirect(reverse('home'))
 
 
-
 # def delete_ticket(request, ticket_id: int):
 #     ticket = Ticket.objects.get(id=ticket_id)
 #     ticket.delete()
 #     return redirect('ticket-list')
-
 
 
 # Просто пример!

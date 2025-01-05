@@ -5,6 +5,8 @@ from django.views.generic import RedirectView
 urlpatterns = [
     path('', RedirectView.as_view(url='get-products/', permanent=True)),
     path('get-products/', views.get_products, name='get-products'), # Одна и та же view с разными url-адресами !
+    path('page/<int:page_number>/', views.get_products, name='paginator'),
+
     # path('<int:category_id>/get-products/', views.get_products, name='products-by-category'),  # IF category_id !!!
     path('<int:season_id>/get-products/', views.get_products, name='products-by-category'),
 
