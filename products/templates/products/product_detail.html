@@ -6,11 +6,12 @@
     <div style="margin-left: 150px">
 
         <div>
-          <h3 class="pt-3" style="color: black">{{ product.name_product }}</h3>
+          <h3 class="pt-3" style="color: black">{{ product.name_product }} / Артикул - {{ product.article }}</h3>
           <h4 style="font-family: cursive; color: dimgrey">Цвет - {{ product.color }}</h4>
           <h4 style="font-family: cursive; color: dimgrey">Категория - {{ product.category.name_category }}</h4>
           <h4 style="font-family: cursive; color: dimgrey">Сезон - {{ product.season.name_season }}</h4>
           <h4 style="font-family: cursive; color: dimgrey">Цена - <span style="font-family: fantasy">{{ product.price }} BYN</span></h4>
+{#          <h4 style="font-family: cursive; color: dimgrey">Размер - {{ product.sizes }}</h4>#}
 
           <br>
 
@@ -63,7 +64,7 @@
           <br>
           <br>
 
-{#         2 ВАРИАНТ через КАРУСЕЛЬ !!!#}
+{#         3 ВАРИАНТ через КАРУСЕЛЬ !!!#}
 {#                  смотри BOOTSTRAP - https://getbootstrap.com/docs/5.3/components/carousel/#how-it-works#}
           <div id="carouselExampleIndicators" class="carousel slide" style="width: 600px">
             <div class="carousel-indicators">

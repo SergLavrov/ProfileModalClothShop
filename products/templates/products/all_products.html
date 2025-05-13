@@ -283,7 +283,7 @@
                 </select>
             </div>
 
-{#            АНАЛОГИЧНО можно сделать для "ОБУВЬ" и "АКСЕССУАРЫ"#}
+{#            Пример для "ОДЕЖДА" - АНАЛОГИЧНО можно сделать для "ОБУВЬ" и "АКСЕССУАРЫ"#}
             <div style="padding-bottom: 25px">
                 <select name="name_cloth" class="form-select" onchange="form.submit()">
                   <option selected disabled>ОДЕЖДА</option>
@@ -299,7 +299,7 @@
 
 {#            Чтобы НЕ нажимать КНОПКУ (type="submit") (см. ниже) для подтверждения отправки, мы можем прописать#}
 {#            в <select onchange="form.submit()"> - тогда при выборе нужного значения - #}
-{#            сортировка происходит автоматически  !!!#}
+{#            "подтверждение выбора" происходит автоматически  !!!#}
 
         {#Тег <option> определяет опцию - "Выберите из ВЫПАДАЮЩЕГО списка". <option> помещаются внутрь <select> #}
         {#Тег можно использовать без каких-либо атрибутов, но Обычно требуется атрибут value, который указывает, #}
@@ -694,7 +694,7 @@
             </button>
             <div class="dropdown-menu" style="background-color: lightgrey">
 
-              {% for s in seasons %} {# seasons берем из data из views #}
+              {% for s in seasons %} {# seasons берем из "data" из views #}
                 <label>
                     <input type="checkbox" class="form-check-input" name="seasons" value="{{ s.id }}">
                     <span>{{ s.name_season }}</span>
@@ -784,12 +784,12 @@
                 <img src="{{ product.image.url }}" class="card-img" alt="image">
                 <div class="card-body">
                   <div class="d-flex justify-content-between">
-                    <h6 class="card-title">{{ product.name_product }} - {{ product.price }} BYN</h6>
-    {#                    <h6 class="text-black-50">{{ product.price }} BYN</h6>#}
+                    <h6 class="card-title">{{ product.name_product }} - {{ product.article }}</h6>
+                    <h6 class="text-black-50">{{ product.price }} BYN</h6>
                   </div>
     {#                  <p class="card-text">{{ product.description }}</p>#}
                       <div class="d-flex justify-content-between">
-                        <a href="{% url 'product-details' product.id %}" class="btn btn-outline-secondary">Подробно</a>
+                        <a href="{% url 'product-details' product.id %}" class="btn btn-outline-secondary btn-sm">Подробно</a>
 {#                        <a href="{% url 'add-to-basket' product.id %}" class="btn btn-outline-secondary">Add to basket</a>#}
 {#                        {% if user.is_authenticated %}#}
 {#                        <a href="{% url 'add-to-basket' product.id %}"><i class="fa fa-shopping-cart"></i></a>#}

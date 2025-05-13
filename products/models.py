@@ -18,15 +18,38 @@ class Season(models.Model):
     name_season = models.CharField(max_length=50)
 
 
+class Size(models.Model):
+    name_size = models.IntegerField(blank=True, null=True)
+
+# null=True - допустимое значение NULL в базе данных для поля !
+# blank=True - поле может быть пустым !
+# unique=True - поле должно быть уникальным !
+"""
+Many To Many !!! - ХОРОШИЙ ПРИМЕР !!!! С ПОЯСНЕНИЕМ см на сайте:
+https://metanit.com/python/django/5.11.php
+"""
+
 class Product(models.Model):
+    sizes = models.ManyToManyField(Size, related_name='products_by_size')
     name_product = models.CharField(max_length=50)
+    article = models.CharField(max_length=50)
     color = models.CharField(max_length=50)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     season = models.ForeignKey(Season, on_delete=models.CASCADE)
     image = models.ImageField('/product_image/')
     is_deleted = models.BooleanField(default=False)
     price = models.FloatField()
-
+    quantity = models.PositiveIntegerField(default=0)
+    """
+    Пояснение для поля 'quantity':
+    Установка значений по умолчанию делает ввод данных более понятным. Используем параметр default=0 для задания 
+    начального значения поля! Таким образом, quantity будет начинаться с "нуля".
+    Справочник типов полей:
+    https://django.fun/docs/django/5.0/ref/models/fields/    
+    PositiveIntegerField - (положительное целое число) должно быть либо положительным, либо нулевым (0). 
+    Значения от 0 до 2147483647 безопасны во всех БД, поддерживаемых Django. 
+    Значение 0 принимается по причинам обратной совместимости.
+    """
     # P.S. В принципе можно поле 'image' здесь НЕ прописывать,
     # а ВСЕ фотографии будут привязываться в class ProductImage(models.Model) через ForeignKey!
 

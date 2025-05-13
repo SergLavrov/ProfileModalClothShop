@@ -17,8 +17,13 @@
       {% csrf_token %}
 
       <div class="col-12 col-lg-6 pb-3">
-          <label for="inputnameproduct" class="form-label fw-medium">Наименование товара</label>
-          <input type="text" name="name_product" class="form-control" id="inputnameproduct" placeholder="Введите название товара">
+          <label for="inputnameprod" class="form-label fw-medium">Наименование товара</label>
+          <input type="text" name="name_prod" class="form-control" id="inputnameprod" placeholder="Введите название товара">
+      </div>
+
+      <div class="col-12 col-lg-6 pb-3">
+          <label for="inputarticle" class="form-label fw-medium">Артикул</label>
+          <input type="text" name="article" class="form-control" id="inputarticle" placeholder="Введите артикул товара">
       </div>
 
       <div class="col-12 col-lg-6 pb-3">
@@ -56,6 +61,29 @@
           {% endfor %}
         </select>
       </div>
+
+      <div class="col-12 col-lg-6 pb-3">
+        <label for="inputsize" class="form-label fw-medium">Размер</label>
+        <select class="form-select" id="inputsize" name="size_id">
+          <option selected disabled>Выберите размер</option>
+
+          {% for size in sizes %}
+
+          <option value="{{ size.id }}">{{ size.name_size }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+
+      <div class="col-12 col-lg-6 pb-3">
+          <label for="inputprice" class="form-label fw-medium">Цена</label>
+          <input type="number" name="price" class="form-control" id="inputprice" min="1" placeholder="Укажите цену товара">
+      </div>
+
+      <div class="col-12 col-lg-6 pb-3">
+          <label for="inputquantity" class="form-label fw-medium">Количество</label>
+          <input type="number" name="quantity" class="form-control" id="inputquantity" min="1"
+                 placeholder="Укажите количество товара">
 
       <div class="col-12 pb-3" style="margin-bottom: 15px; padding-top: 10px">
         <label for="image">Фото</label>

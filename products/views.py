@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from products.models import Product, Category, Season, ProductImage
+from products.models import Product, Category, Season, Size, ProductImage
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 # from django.contrib.auth.models import User
@@ -10,10 +10,12 @@ def get_products_list(request):
     """ Вывод списка товаров в виде таблицы для авторизованных пользователей """
     user = request.user
     if user.is_authenticated:
-        products = Product.objects.all()
+        products = Product.objects.all().order_by('article')
+        # sizes_list = Size.objects.all()
 
         data = {
-            'products': products
+            # 'sizes': sizes_list,
+            'products': products,
         }
         return render(request, 'products/products_list.html', data)
 
@@ -371,24 +373,41 @@ def checkbox_products(request):
 
 def add_product(request):
     if request.method == 'POST':
-        name_product = request.POST.get('name_product') # name="name_product" из шаблона add_product.html
-        color = request.POST.get('color')               # name="color" из шаблона add_product.html
-        category_id = request.POST.get('category_id')   # name="category_id" из шаблона add_product.html
-        season_id = request.POST.get('season_id')       # name="season_id" из шаблона add_product.html
+        name_product = request.POST.get('name_prod')    # name="name_prod" из шаблона add_product.html
+        article = request.POST.get('article')           # name="article"
+        color = request.POST.get('color')               # name="color"
+        price = request.POST.get('price')               # name="price"
+        quantity = request.POST.get('quantity')         # name="quantity"
+        category_id = request.POST.get('category_id')   # name="category_id"
+        season_id = request.POST.get('season_id')       # name="season_id"
         image = request.FILES.get('image')              # name="image" из шаблона add_product.html
         # is_deleted = request.POST.get('is_deleted')#
+
+        size_id = request.POST.get('size_id')  # name='size_id' Получаем id "выбранного размера" из POST-запроса!
 
         category = Category.objects.get(id=category_id)
         season = Season.objects.get(id=season_id)
 
         product = Product.objects.create(
             name_product=name_product,
+            article=article,
             color=color,
+            price=price,
+            quantity=quantity,
             category=category,
             season=season,
             image=image,
         )
         product.save()
+
+        size = Size.objects.get(id=size_id)  # Получаем по id "нужный размер" в БД!
+
+        # СВЯЗЫВАЕМ Продукт и Размер: "sizes" - это поле из class Product (sizes = models.ManyToManyField(Size))
+        # 1 вариант:
+        # product.sizes.add(size)
+        # 2 вариант:
+        product.sizes.set(size)
+
 
         images = request.FILES.getlist('images_for_getlist') # name="images_for_getlist" из шаблона add_product.html
 
@@ -405,9 +424,11 @@ def add_product(request):
     else:
         category_list = Category.objects.all()
         season_list = Season.objects.all()
+        size_list = Size.objects.all()
         data = {
             'categories': category_list,
             'seasons': season_list,
+            'sizes': size_list,
         }
 
         return render(request, 'products/add_product.html', data)

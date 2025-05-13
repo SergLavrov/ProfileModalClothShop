@@ -11,6 +11,10 @@
       <tr style="text-align: center">
         <th>Фото</th>
         <th>Название</th>
+        <th>Артикул</th>
+        <th>Размер</th>
+        <th>Цена</th>
+        <th>Количество</th>
         <th>Цвет</th>
         <th>Категория</th>
         <th>Сезон</th>
@@ -26,6 +30,16 @@
             <img src="{{ product.image.url }}" alt="Фото товара" height="60" width="60">
           </td>
           <td>{{ product.name_product }}</td>
+          <td>{{ product.article }}</td>
+          <td>
+              {% for size in product.sizes.all %}
+
+                  {{ size.name_size }}
+
+              {% endfor %}
+          </td>
+          <td>{{ product.price }}</td>
+          <td>{{ product.quantity }}</td>
           <td>{{ product.color }}</td>
           <td>{{ product.category.name_category }}</td>
           <td>{{ product.season.name_season }}</td>
