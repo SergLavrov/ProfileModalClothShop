@@ -19,18 +19,21 @@ class Season(models.Model):
 
 
 class Size(models.Model):
-    name_size = models.IntegerField(blank=True, null=True)
+    name_size = models.IntegerField(max_length=56)
 
 # null=True - допустимое значение NULL в базе данных для поля !
 # blank=True - поле может быть пустым !
 # unique=True - поле должно быть уникальным !
 """
-Many To Many !!! - ХОРОШИЙ ПРИМЕР !!!! С ПОЯСНЕНИЕМ см на сайте:
+Many To Many !!! - ХОРОШИЙ ПРИМЕР !!!! С ПОЯСНЕНИЕМ см на сайте METANIT:
 https://metanit.com/python/django/5.11.php
+https://metanit.com/python/django/5.7.php
 """
 
+
 class Product(models.Model):
-    sizes = models.ManyToManyField(Size, related_name='products_by_size')
+    # sizes = models.ManyToManyField(Size, through='ProductInfo')
+    sizes = models.ManyToManyField(Size, related_name='products_sizes')
     name_product = models.CharField(max_length=50)
     article = models.CharField(max_length=50)
     color = models.CharField(max_length=50)
@@ -40,6 +43,15 @@ class Product(models.Model):
     is_deleted = models.BooleanField(default=False)
     price = models.FloatField()
     quantity = models.PositiveIntegerField(default=0)
+
+
+# class ProductInfo(models.Model):
+#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+#     size = models.ForeignKey(Size, on_delete=models.CASCADE)
+#     prod_count = models.PositiveIntegerField(default=0)
+#     price_size = models.FloatField(default=0)
+#     date_add = models.DateTimeField(auto_now_add=True)
+
     """
     Пояснение для поля 'quantity':
     Установка значений по умолчанию делает ввод данных более понятным. Используем параметр default=0 для задания 

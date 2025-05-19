@@ -62,18 +62,27 @@
         </select>
       </div>
 
+{#      1 Вар для ManyToManyField: через ВЫПАДАЮЩИЙ СПИСОК - select (можно выбрать только ОДИН размер !!! #}
+{#      <div class="col-12 col-lg-6 pb-3">#}
+{#        <label for="inputsize" class="form-label fw-medium">Размер</label>#}
+{#        <select class="form-select" id="inputsize" name="size_id">#}
+{#          <option selected disabled>Выберите размер</option>#}
+{##}
+{#          {% for size in sizes %}#}
+{##}
+{#          <option value="{{ size.id }}">{{ size.name_size }}</option>#}
+{#          {% endfor %}#}
+{#        </select>#}
+{#      </div>#}
+
+{#      2 Вар для ManyToManyField: через CHECKBOX можно привязать НЕСКОЛЬКО размеров одному товару! #}
       <div class="col-12 col-lg-6 pb-3">
-        <label for="inputsize" class="form-label fw-medium">Размер</label>
-        <select class="form-select" id="inputsize" name="size_id">
-          <option selected disabled>Выберите размер</option>
-
+          <label>Выберите размер</label><br>
           {% for size in sizes %}
-
-          <option value="{{ size.id }}">{{ size.name_size }}</option>
+             <input type="checkbox" name="sizes_for_getlist" value="{{ size.id }}">{{ size.name_size }} <br />
           {% endfor %}
-        </select>
+{#          <input type="submit" value="Сохранить">#}
       </div>
-
 
       <div class="col-12 col-lg-6 pb-3">
           <label for="inputprice" class="form-label fw-medium">Цена</label>

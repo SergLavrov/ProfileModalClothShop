@@ -96,7 +96,7 @@ def get_products(request, season_id=None, page_number=1):  # по умолчан
     else:
         products_list = Product.objects.filter(is_deleted=False)
 
-    per_page = 8                                    # переменная per_page - Количество продуктов на странице!
+    per_page = 12                                    # переменная per_page - Количество продуктов на странице!
     paginator = Paginator(products_list, per_page)  # В перем. paginator - передаем products (все продукты) и per_page
     products_paginator = paginator.page(page_number) # здесь передаем page_number - № выбранной страницы
 
@@ -383,7 +383,15 @@ def add_product(request):
         image = request.FILES.get('image')              # name="image" из шаблона add_product.html
         # is_deleted = request.POST.get('is_deleted')#
 
-        size_id = request.POST.get('size_id')  # name='size_id' Получаем id "выбранного размера" из POST-запроса!
+        # 1 Вар для ManyToManyField:
+        # size_id = request.POST.get('size_id')  # name='size_id' Получаем id "выбранного размера" из POST-запроса!
+
+        # 2 Вар для ManyToManyField:
+        """ Используем getlist для получения всех выбранных значений из нашего чекбокса, 
+            иначе при использовании get будет возвращено только последнее выбранное значение. 
+        """
+        sizes_ids = request.POST.getlist('sizes_for_getlist')  # name="sizes_for_getlist"
+                                                              # Получаем id всех выбранных размеров из БД для checkbox:
 
         category = Category.objects.get(id=category_id)
         season = Season.objects.get(id=season_id)
@@ -399,15 +407,18 @@ def add_product(request):
             image=image,
         )
         product.save()
-
-        size = Size.objects.get(id=size_id)  # Получаем по id "нужный размер" в БД!
+        # 1 Вар для ManyToManyField:
+        # size = Size.objects.get(id=size_id)  # Получаем по id "нужный размер" в БД!
 
         # СВЯЗЫВАЕМ Продукт и Размер: "sizes" - это поле из class Product (sizes = models.ManyToManyField(Size))
-        # 1 вариант:
-        # product.sizes.add(size)
-        # 2 вариант:
-        product.sizes.set(size)
+        # ПРИМЕР см. https: // metanit.com / python / django / 5.11.php
 
+        # 1 Вар: - если добавляем один размер:
+        # product.sizes.add(size)
+
+        # 2 Вар для ManyToManyField: - если привязывем ПРОДУКТУ с одним id НЕСКОЛЬКО размеров:
+        sizes_selected = Size.objects.filter(id__in=sizes_ids)
+        product.sizes.set(sizes_selected)
 
         images = request.FILES.getlist('images_for_getlist') # name="images_for_getlist" из шаблона add_product.html
 
@@ -422,6 +433,7 @@ def add_product(request):
         return HttpResponseRedirect(reverse('get-products-list'))
 
     else:
+
         category_list = Category.objects.all()
         season_list = Season.objects.all()
         size_list = Size.objects.all()

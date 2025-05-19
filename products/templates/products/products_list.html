@@ -32,6 +32,7 @@
           <td>{{ product.name_product }}</td>
           <td>{{ product.article }}</td>
           <td>
+{#              для Many To Many !!!#}
               {% for size in product.sizes.all %}
 
                   {{ size.name_size }}
